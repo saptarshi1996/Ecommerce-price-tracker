@@ -8,8 +8,14 @@ export const UserCode = {
   "USEREXISTS400": "User already exists",
   "USEREGISTER200": "User registered successfully",
 
+  "USERALREADYVERIFIED400": "User already verified.",
+
+  "USERVERIFIED200": "User verified successfully",
 
   "USERNOTVERIFIED401": "User not verified",
   "USERDETAILS200": "User details fetched successfully",
+
+  "USERTOKENRESEND200": "Token sent to user email successfully",
+  "USERVERIFICATIONNOTFOUND404": "User verification does not exists",
 
 };

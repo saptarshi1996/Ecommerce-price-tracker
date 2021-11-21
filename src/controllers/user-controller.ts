@@ -5,7 +5,9 @@ import { UserHelper, ResponseHelper, DateHelper } from "../helpers";
 import {
   IUser,
   IUserLogin,
-  IUserRegister
+  IUserRegister,
+  IVerifyUser,
+  IResendToken,
 } from "../interfaces";
 
 export class UserController {
@@ -31,7 +33,7 @@ export class UserController {
           email: userLoginPayload.email,
         },
         raw: true,
-        attributes: ['id', 'password'],
+        attributes: ['id', 'password', 'is_verified'],
       });
 
       if (!userExists) {
@@ -91,7 +93,6 @@ export class UserController {
       });
 
       const otp: number = this.userHelper.generateOtp();
-
       const expiryDate: Date = this.dateHelper.addMinutesToCurrentDate(30);
       await UserVerification.create({
         otp,
@@ -107,15 +108,118 @@ export class UserController {
     }
   }
 
-  verifyUser = (req: Request, res: Response) => {
+  verifyUser = async (req: Request, res: Response) => {
+    try {
 
+      const verifyUserPayload = req.body as IVerifyUser;
+
+      // Check if the user exists and is not verified.
+      const userExists = await User.findOne({
+        where: {
+          email: verifyUserPayload.email,
+        },
+        raw: true,
+        attributes: ['id', 'is_verified'],
+      });
+
+      if (!userExists) {
+        return this.responseHelper.error(res, "USERNOTFOUND404");
+      }
+
+      if (userExists && userExists.is_verified) {
+        return this.responseHelper.error(res, "USERALREADYVERIFIED400");
+      }
+
+      // Get the verification data using user id
+      const verificationExists = await UserVerification.findOne({
+        where: {
+          otp: verifyUserPayload.otp,
+          user_id: userExists.id,
+          is_revoked: false,
+        },
+        raw: true,
+        attributes: ['id'],
+      });
+
+      if (!verificationExists) {
+        return this.responseHelper.error(res, "USERVERIFICATIONNOTFOUND404");
+      }
+
+      // Update verification data and verify user.
+      const verifyUserPromise = User.update({
+        is_verified: true,
+      }, {
+        where: {
+          id: userExists.id,
+        }
+      });
+
+      const revokeOtpPromise = UserVerification.update({
+        is_revoked: true,
+      }, {
+        where: { 
+          id: verificationExists.id,
+        }
+      });
+
+      await Promise.all([verifyUserPromise, revokeOtpPromise]);
+
+      return this.responseHelper.success(res, "USERVERIFIED200");
+
+    } catch (ex) {
+      return this.responseHelper.error(res, "SERVER500", ex);
+    }
   }
 
-  resendToken = (req: Request, res: Response) => {
+  resendToken = async (req: Request, res: Response) => {
+    try {
 
+      const resendTokenPayload: IResendToken = req.body as IResendToken;
+
+      // Check if user exists by this email.
+      const userExists = await User.findOne({
+        where: {
+          email: resendTokenPayload.email
+        },
+        raw: true,
+        attributes: ['id', 'is_verified'],
+      });
+
+      if (!userExists) {
+        return this.responseHelper.error(res, "USERNOTFOUND404");
+      }
+
+      if (userExists && userExists.is_verified) {
+        return this.responseHelper.error(res, "USERALREADYVERIFIED400");
+      }
+
+      // Revoke all the tokens for the user.
+      await UserVerification.update({
+        is_revoked: true,
+      }, {
+        where: {
+          user_id: userExists.id,
+        }
+      });
+
+      // Create a new record.
+      const otp: number = this.userHelper.generateOtp();
+      const expiryDate: Date = this.dateHelper.addMinutesToCurrentDate(30);
+      await UserVerification.create({
+        otp,
+        user_id: userExists.id,
+        is_revoked: false,
+        expires_at: expiryDate,
+      });
+
+      return this.responseHelper.success(res, "USERTOKENRESEND200");
+
+    } catch (ex) {
+      return this.responseHelper.error(res, "SERVER500", ex);
+    }
   }
 
-  getUserDetails = async (req: Request | any, res: Response) => {
+  getUserDetails = async (req: Request, res: Response) => {
     try {
 
       const user: IUser = req.user as any;

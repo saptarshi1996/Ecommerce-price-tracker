@@ -1,7 +1,18 @@
 import express, { Application } from "express";
 
 import { Constant } from "./config";
+import { IUser } from "./interfaces";
 import { Route } from "./routes";
+
+declare global {
+  
+  namespace Express {
+    interface Request {
+      user: IUser
+    }
+  }
+
+}
 
 export class App {
 

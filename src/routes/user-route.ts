@@ -27,6 +27,8 @@ export class UserRoute {
   private setPostRoute(): void {
     this.router.post("/user-login", this.userController.userLogin);
     this.router.post("/user-register", this.userController.userRegister);
+    this.router.post("/user-verify", this.userController.verifyUser);
+    this.router.post("/resend-token", this.userController.resendToken);
   }
 
   private setGetRoute(): void {

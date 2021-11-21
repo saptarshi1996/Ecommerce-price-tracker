@@ -9,3 +9,12 @@ export interface IUserRegister {
   email: string;
   password: string;
 }
+
+export interface IVerifyUser {
+  email: string;
+  otp: number;
+}
+
+export interface IResendToken { 
+  email: string;
+}

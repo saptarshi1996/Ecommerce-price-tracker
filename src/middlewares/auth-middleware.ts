@@ -14,7 +14,7 @@ export class AuthMiddleware {
     this.responseHelper = new ResponseHelper();
   }
 
-  verifyUser = async (req: Request | any, res: Response, next: NextFunction) => {
+  verifyUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
       const { authorization } = req.headers;
