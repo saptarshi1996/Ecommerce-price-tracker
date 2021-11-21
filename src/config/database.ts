@@ -24,9 +24,12 @@ export class Database {
       });
 
       // Run automigrations.w
-      this.sequelize.sync();
+      // this.sequelize.sync({
+      //   force: true,
+      // });
       
     } catch (ex) {
+      console.log(ex.message);
       throw new Error(ex);
     }
   }

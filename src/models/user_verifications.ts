@@ -1,52 +1,51 @@
 import { DataTypes, ModelCtor, Sequelize } from "sequelize";
 
 import { Database } from "../config";
-import { IUser } from "../interfaces";
+import { IUserVerification } from "../interfaces";
 
+import { User } from "./users";
 
-class UserModel { 
+class UserVerificationModel { 
 
   private sequelize: Sequelize;
-  private model: ModelCtor<IUser>;
+  private model: ModelCtor<IUserVerification>;
 
   constructor() { 
     this.sequelize = new Database().getSequelize();
     this.setModel();
+    this.createRelations();
   }
 
   private setModel(): void { 
-    this.model = this.sequelize.define<IUser>("users", {
+    this.model = this.sequelize.define<IUserVerification>("user_verifications", {
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      first_name: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-      last_name: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
-      },
-      email: {
-        type: DataTypes.STRING(255),
-        unique: true,
+
+      otp: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
 
-      password: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-      },
-
-      is_verified: {
+      is_revoked: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,
         allowNull: true,
+        defaultValue: false,
       },
 
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      
+      expires_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      
       createdAt: { 
         type: DataTypes.DATE,
         allowNull: true,
@@ -63,10 +62,16 @@ class UserModel {
     });
   }
 
-  public getModel(): ModelCtor<IUser> {
+  public getModel(): ModelCtor<IUserVerification> {
     return this.model;
+  }
+
+  private createRelations(): void {
+    this.model.belongsTo(User, {
+      foreignKey: "user_id",
+    });
   }
 
 }
 
-export const User = new UserModel().getModel();
+export const UserVerification = new UserVerificationModel().getModel();
