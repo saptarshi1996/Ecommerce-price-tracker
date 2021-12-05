@@ -1,53 +1,32 @@
 import { DataTypes, ModelCtor, Sequelize } from "sequelize";
 
-import { IProduct } from "../interfaces";
+import { IUserProduct } from "../interfaces";
 import { Database } from "../config";
 
-import { Link } from "./links";
 
-class ProductModel { 
+class UserProductModel {
 
   private sequelize: Sequelize;
-  private model: ModelCtor<IProduct>;
+  private model: ModelCtor<IUserProduct>;
 
-  constructor() {
+  public constructor() {
     this.sequelize = new Database().getSequelize();
     this.setModel();
     this.createRelations();
   }
 
-  public getModel(): ModelCtor<IProduct> {
+  public getModel(): ModelCtor<IUserProduct> {
     return this.model;
   }
 
   private setModel(): void {
-    this.model = this.sequelize.define<IProduct>("products", {
+    this.model = this.sequelize.define<IUserProduct>("user_products", {
 
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-      },
-
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-
-      current_price: {
-        type: DataTypes.REAL,
-        allowNull: false, 
-      },
-
-      lowest_price: {
-        type: DataTypes.REAL,
-        allowNull: false,
-      },
-
-      link_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
       },
 
       createdAt: { 
@@ -69,11 +48,7 @@ class ProductModel {
   }
 
   private createRelations(): void { 
-    this.getModel().belongsTo(Link, {
-      foreignKey: "link_id",
-    });
   }
-
 }
 
-export const Product = new ProductModel().getModel();
+export const UserProduct = new UserProductModel().getModel();

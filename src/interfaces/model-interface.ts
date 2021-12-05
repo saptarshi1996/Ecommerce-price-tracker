@@ -45,7 +45,8 @@ export interface IProduct extends Model {
 
   id?: number;
   name?: string;
-  price?: number;
+  current_price?: number;
+  lowest_price?: number;
 
   link_id?: number; // Foreign key for link
 
