@@ -69,9 +69,9 @@ class ProductModel {
   }
 
   private createRelations(): void { 
-    this.getModel().belongsTo(Link, {
+    this.model.belongsTo(Link, {
       foreignKey: "link_id",
-    });
+    })
   }
 
 }

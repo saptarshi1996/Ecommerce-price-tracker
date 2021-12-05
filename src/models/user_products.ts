@@ -3,6 +3,8 @@ import { DataTypes, ModelCtor, Sequelize } from "sequelize";
 import { IUserProduct } from "../interfaces";
 import { Database } from "../config";
 
+import { User } from "./users";
+import { Product } from "./products";
 
 class UserProductModel {
 
@@ -29,6 +31,16 @@ class UserProductModel {
         autoIncrement: true,
       },
 
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
+      product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
       createdAt: { 
         type: DataTypes.DATE,
         allowNull: true,
@@ -48,6 +60,12 @@ class UserProductModel {
   }
 
   private createRelations(): void { 
+    this.model.belongsTo(User, {
+      foreignKey: "user_id",
+    });
+    this.model.belongsTo(Product, {
+      foreignKey: "product_id",
+    });
   }
 }
 

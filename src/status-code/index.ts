@@ -1,5 +1,7 @@
-import { UserCode } from "./user-code";
 import { HttpCode } from "./http-code";
+
+import { UserCode } from "./user-code";
+import { ProductCode } from "./product-code";
 
 export class StatusCode {
 
@@ -9,6 +11,7 @@ export class StatusCode {
     this.statusCodeObject = {
       ...UserCode,
       ...HttpCode,
+      ...ProductCode,
     };
   }
 
