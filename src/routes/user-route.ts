@@ -6,7 +6,7 @@ import {
 
 import { AuthMiddleware } from "../middlewares";
 
-export class UserRoute {
+class UserRoute {
 
   private router: Router;
 

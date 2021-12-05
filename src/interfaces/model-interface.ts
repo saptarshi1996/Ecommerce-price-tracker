@@ -28,3 +28,42 @@ export interface IUserVerification extends Model {
   deletedAt?: Date;
 
 }
+
+export interface ILink extends Model { 
+
+  id?: number;
+  url?: string;
+  site_name?: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+
+}
+
+export interface IProduct extends Model { 
+
+  id?: number;
+  name?: string;
+  price?: number;
+
+  link_id?: number; // Foreign key for link
+
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+
+}
+
+export interface IUserProduct extends Model { 
+
+  id?: number;
+
+  product_id?: number;
+  user_id?: number;
+
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+
+}
