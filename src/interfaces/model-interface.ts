@@ -60,8 +60,8 @@ export interface IUserProduct extends Model {
 
   id?: number;
 
-  product_id?: number;
-  user_id?: number;
+  product_id?: number; // Product id
+  user_id?: number; // User id
 
   createdAt?: Date;
   updatedAt?: Date;
