@@ -1,7 +1,9 @@
-export const App = () => {
+import { Fragment, FunctionComponent } from "react";
+
+export const App: FunctionComponent<any> = () => {
   return (
-    <div>
+    <Fragment>
       App
-    </div>
+    </Fragment>
   );
 }
