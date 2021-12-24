@@ -20,4 +20,8 @@ export class App {
     // this.app.use("/", this.router.getRouter());
 
   }
+
+  public start() {
+    
+  }
 }

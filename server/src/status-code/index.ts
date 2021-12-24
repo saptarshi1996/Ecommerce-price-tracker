@@ -20,4 +20,4 @@ export class StatusCode {
     return this.statusObject[key];
   }
 
-};
+}
