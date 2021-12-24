@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { PrismaClient, User } from '@prisma/client'
 
 import { UserLogin } from "../interfaces";
-import { ResponseHelper } from "../helpers";
+import { ResponseHelper, UserHelper } from "../helpers";
 
 const { user } = new PrismaClient()
 
@@ -36,6 +36,8 @@ export class AuthController {
       }
 
       // Check if the user password is correct?
+
+
       return this.responseHelper.success(res, "LOGIN200");
 
     } catch (ex) {

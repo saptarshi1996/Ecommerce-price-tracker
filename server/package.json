@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@prisma/client": "^3.7.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/node": "^17.0.4",
     "prisma": "^3.7.0",
     "ts-node": "^10.4.0",
