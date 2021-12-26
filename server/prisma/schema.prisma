@@ -24,5 +24,25 @@ model User {
   updatedAt DateTime?
   deletedAt DateTime?
 
+
+  user_verifications UserVerification[]
+  
   @@map("users")
+}
+
+model UserVerification {
+
+  id          Int      @id @default(autoincrement())
+  otp         Int
+  is_revoked  Boolean? @default(false)
+  valid_until DateTime
+
+  user    User @relation(fields: [user_id], references: [id])
+  user_id Int // add fk with user.
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("user_verfications")
 }

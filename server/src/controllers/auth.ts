@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { PrismaClient, User } from '@prisma/client'
 
-import { UserLogin } from "../interfaces";
+import { UserLogin, UserRegiser } from "../interfaces";
 import { ResponseHelper, UserHelper } from "../helpers";
 
-const { user } = new PrismaClient()
+const { user, userVerification } = new PrismaClient()
 
 export class AuthController {
 
@@ -64,6 +64,39 @@ export class AuthController {
 
   public async userRegister(req: Request, res: Response): Promise<Response> {
     try {
+
+      const { first_name, last_name, email, password } = req.body as UserRegiser;
+
+      // Check if the user exists?
+      const userExists: UserRegiser = await user.findUnique({
+        where: {
+          email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (userExists) {
+        return this.responseHelper.error(res, "USEREXISTS400");
+      }
+
+      // create a new user with hashed password.
+      const hashedPassword: string = this.userHelper.hashPassword(password);
+      const userCreated = await user.create({
+        data: {
+          first_name,
+          last_name,
+          email,
+          password: hashedPassword,
+        }
+      });
+
+      console.log(userCreated);
+
+      // Using pk of user created it to the user verifications.
+
+      return this.responseHelper.success(res, "USERREGISTER200");
 
     } catch (ex) {
       return this.responseHelper.error(res, "SERVER500", ex);

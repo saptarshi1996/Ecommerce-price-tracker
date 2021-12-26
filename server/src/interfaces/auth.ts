@@ -1,6 +1,14 @@
 export interface UserLogin {
-  id: number | null;
-  email: string | null;
-  password: string | null;
-  is_verified: boolean | null;
+  id?: number;
+  email?: string;
+  password?: string;
+  is_verified?: boolean;
+}
+
+export interface UserRegiser {
+  id?: number;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  password?: string;
 }
