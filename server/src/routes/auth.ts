@@ -13,16 +13,18 @@ export class AuthRouter {
 
   constructor() {
 
+    this.router = Router();
+
     this.authController = new AuthController();
 
     this.postRoute = [
       {
-        url: "/auth/login",
+        url: "/login",
         type: "POST",
         controller: this.authController.userLogin,
       },
       {
-        url: "/auth/register",
+        url: "/register",
         type: "POST",
         controller: this.authController.userRegister,
       },

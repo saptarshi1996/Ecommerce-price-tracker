@@ -46,3 +46,4 @@ model UserVerification {
 
   @@map("user_verfications")
 }
+

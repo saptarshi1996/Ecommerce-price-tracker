@@ -11,11 +11,13 @@ export class ExpressRouter {
 
   constructor() {
 
+    this.router = Router();
+
     this.routerList = [
       {
         url: "/auth",
-        route: new AuthRouter(),
-      }
+        route: new AuthRouter().getRouter(),
+      },
     ];
 
     this.routerList.forEach((route: IBaseRoute) => {
@@ -25,7 +27,7 @@ export class ExpressRouter {
   }
 
   public getRouter(): Router {
-    return this.router
+    return this.router;
   }
 
 }

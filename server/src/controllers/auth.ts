@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client';
 
-import { UserLogin, UserRegiser } from "../interfaces";
+import { UserLogin, UserRegiser, IUser } from "../interfaces";
 import { ResponseHelper, UserHelper } from "../helpers";
 
-const { user, userVerification } = new PrismaClient()
+const { user, userVerification } = new PrismaClient();
 
 export class AuthController {
 
@@ -12,6 +12,7 @@ export class AuthController {
   private userHelper: UserHelper;
 
   constructor() {
+    console.log("auth")
     this.responseHelper = new ResponseHelper();
     this.userHelper = new UserHelper();
   }
@@ -101,6 +102,32 @@ export class AuthController {
     } catch (ex) {
       return this.responseHelper.error(res, "SERVER500", ex);
     }
+  }
+
+  public async verifyUser(req: Request, res: Response) { 
+
+    try { 
+
+      const { email } = req.body as { email: string };
+
+      // check if the user email is valid?
+      const userExists: IUser = await user.findUnique({
+        where: {
+          email,
+        },
+        select: {
+          id: true,
+        }
+      });
+
+      if (!userExists) {
+        return this.responseHelper.error(res, "USERVERIFICATION404");
+      }
+
+    } catch (ex) {
+      return this.responseHelper.error(res, "SERVER500", ex);
+    }
+
   }
 
 }

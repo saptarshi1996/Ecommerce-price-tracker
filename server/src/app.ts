@@ -1,5 +1,6 @@
-import express, { Application, Router } from "express";
+import express, { Application } from "express";
 
+import { Constant } from "./config";
 import { ExpressRouter } from "./routes";
 
 export class App {
@@ -7,7 +8,12 @@ export class App {
   private app: Application;
   private router: ExpressRouter;
 
+  private constant: Constant;
+
   constructor() {
+
+    this.router = new ExpressRouter();
+    this.constant = new Constant();
 
     this.app = express();
 
@@ -17,11 +23,13 @@ export class App {
     }));
 
     // Set router with app.
-    // this.app.use("/", this.router.getRouter());
+    this.app.use("/", this.router.getRouter());
 
   }
 
   public start() {
-    
+    const port = +this.constant.getEnvironmentVariableByKey("PORT");
+    this.app.listen(port, () => console.log(`server on port ${port}`));
   }
+
 }
