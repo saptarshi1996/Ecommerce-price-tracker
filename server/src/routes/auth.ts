@@ -23,12 +23,9 @@ export class AuthRouter {
         type: "POST",
         controller: this.authController.userLogin,
       },
-      {
-        url: "/register",
-        type: "POST",
-        controller: this.authController.userRegister,
-      },
     ];
+
+    console.log(this.postRoute);
 
     this.getRoute = [];
 

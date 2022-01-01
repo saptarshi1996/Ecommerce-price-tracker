@@ -23,6 +23,7 @@ export class App {
     }));
 
     // Set router with app.
+    console.log(this.router.getRouter());
     this.app.use("/", this.router.getRouter());
 
   }

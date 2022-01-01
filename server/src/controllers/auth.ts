@@ -130,4 +130,14 @@ export class AuthController {
 
   }
 
+  public async resendUserToken(req: Request, res: Response) {
+    try {
+
+      const { email } = req.body;
+
+    } catch (ex) {
+      return this.responseHelper.error(res, "SERVER500", ex);
+    }
+  }
+
 }
