@@ -80,7 +80,7 @@ export class AuthController {
       const hash: string = this.userHelper.hashPassword(userRegister.password);
 
       // create a new user.
-      const userCreated = await user.create({
+      const userCreated: IUser = await user.create({
         data: {
           first_name: userRegister.first_name,
           last_name: userRegister.last_name,
@@ -88,6 +88,8 @@ export class AuthController {
           password: hash,
         }
       });
+
+      console.log(userCreated);
 
       return this.responseHelper.success(h, "USERREGISTER200");
 
