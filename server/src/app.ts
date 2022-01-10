@@ -19,6 +19,7 @@ export class Application {
     this.constant = new Constant();
 
     this.server = new Server({
+      port: this.constant.getEnvironmentByKey("PORT"),
       routes: {
         cors: true,
       }

@@ -1,1 +1,28 @@
-export * from "./auth";
+import { AuthCode } from "./auth";
+
+import { IStatus } from "../interfaces";
+
+export class StatusCode {
+
+  private codes: Object | any;
+
+  constructor() {
+    this.codes = {
+      ...AuthCode,
+    };
+  }
+
+  public getCodeByKey(code: string): IStatus {
+
+    const statusCode: string = code.substring(code.length - 3);
+    const statusSuccess: boolean = statusCode[0] == "2" ? true : false;
+    const statusCodeNumber: number = Number(statusCode);
+
+    return {
+      "status_code": statusCodeNumber,
+      "success": statusSuccess,
+      "message": this.codes[code],
+    };
+
+  }
+}
