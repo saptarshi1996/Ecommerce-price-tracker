@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 config();
 
-export class Constant { 
+export class Constant {
 
   private Environment: Object | any;
 
@@ -10,8 +10,9 @@ export class Constant {
     this.Environment = {
       "PORT": process.env.PORT,
       "HOST": process.env.HOST,
+      "JWT_SECRET": process.env.JWT_SECRET,
     }
-    
+
   }
 
   public getEnvironment(): Object | any {

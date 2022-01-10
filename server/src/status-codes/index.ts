@@ -1,4 +1,5 @@
-import { AuthCode } from "./auth";
+import { Auth } from "./auth";
+import { Response } from "./response";
 
 import { IStatus } from "../interfaces";
 
@@ -8,7 +9,8 @@ export class StatusCode {
 
   constructor() {
     this.codes = {
-      ...AuthCode,
+      ...Auth,
+      ...Response,
     };
   }
 

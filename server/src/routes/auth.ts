@@ -1,6 +1,6 @@
 import { Server } from "@hapi/hapi";
 
-import { UserLoginValidation } from "../validations";
+import { UserLoginValidation, UserRegisterValidation } from "../validations";
 import { AuthController } from "../controllers";
 
 class AuthRoute {
@@ -8,11 +8,14 @@ class AuthRoute {
   private routes: Array<any>;
   private readonly authController: AuthController;
   private readonly tags: Array<string>;
+
+  private readonly userRegisterValidation: UserRegisterValidation;
   private readonly userLoginValidation: UserLoginValidation;
 
   constructor() {
     this.authController = new AuthController();
-    
+
+    this.userRegisterValidation = new UserRegisterValidation();
     this.userLoginValidation = new UserLoginValidation();
 
     this.tags = ["api", "auth"];
