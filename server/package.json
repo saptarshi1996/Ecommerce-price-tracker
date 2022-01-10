@@ -11,5 +11,19 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/inert": "^6.0.4",
+    "@hapi/vision": "^6.1.0",
+    "dotenv": "^10.0.0",
+    "hapi-swagger": "^14.2.4"
+  },
+  "devDependencies": {
+    "@types/hapi__hapi": "^20.0.10",
+    "@types/hapi__inert": "^5.2.3",
+    "@types/hapi__vision": "^5.5.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
 }
