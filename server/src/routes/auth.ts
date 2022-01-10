@@ -34,7 +34,18 @@ class AuthRoute {
           handler: this.authController.userLogin,
           validate: this.userLoginValidation.getSchema(),
         }
-      }
+      },
+      {
+        method: "POST",
+        path: "/auth/register",
+        config: {
+          auth: false,
+          tags: this.tags,
+          description: "User register Controller",
+          handler: this.authController.userRegister,
+          validate: this.userRegisterValidation.getSchema(),
+        }
+      },
     ];
   }
 
