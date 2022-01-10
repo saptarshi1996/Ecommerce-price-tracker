@@ -76,6 +76,19 @@ export class AuthController {
         return this.responseHelper.error(h, "USERALREADYEXISTS400");
       }
 
+      // Get the hash.
+      const hash: string = this.userHelper.hashPassword(userRegister.password);
+
+      // create a new user.
+      const userCreated = await user.create({
+        data: {
+          first_name: userRegister.first_name,
+          last_name: userRegister.last_name,
+          email: userRegister.email,
+          password: hash,
+        }
+      });
+
       return this.responseHelper.success(h, "USERREGISTER200");
 
     } catch (ex) {
