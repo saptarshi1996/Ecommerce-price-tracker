@@ -26,7 +26,7 @@ export class ResponseHelper {
 
   }
 
-  error(h: ResponseToolkit, code: string, err?: Object | any): ResponseObject {
+  public error(h: ResponseToolkit, code: string, err?: Object | any): ResponseObject {
 
     const statusObject: IStatus = this.statusCode.getCodeByKey(code);
     const responseObject: IResponse = {
