@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const { user } = new PrismaClient();
 
 import { ResponseHelper, UserHelper } from "../helpers";
-import { IUserLogin, IUser } from "../interfaces";
+import { IUserLogin, IUser, IUserRegister } from "../interfaces";
 
 export class AuthController {
 
@@ -55,6 +55,32 @@ export class AuthController {
       return this.responseHelper.error(h, "SERVER500", ex);
     }
 
+  }
+
+  public userRegister = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
+    try {
+
+      const userRegister: IUserRegister = req.payload as IUserRegister;
+
+      const userExists: IUser = await user.findUnique({
+        where: {
+          email: userRegister.email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      // user already exists.
+      if (userExists) {
+        return this.responseHelper.error(h, "USERALREADYEXISTS400");
+      }
+
+      return this.responseHelper.success(h, "USERREGISTER200");
+
+    } catch (ex) {
+      return this.responseHelper.error(h, "SERVER500", ex);
+    }
   }
 
 }
