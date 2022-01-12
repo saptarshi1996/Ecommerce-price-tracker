@@ -1,5 +1,6 @@
 import { Auth } from "./auth";
 import { Response } from "./response";
+import { User } from "./user";
 
 import { IStatus } from "../interfaces";
 
@@ -11,6 +12,7 @@ export class StatusCode {
     this.codes = {
       ...Auth,
       ...Response,
+      ...User,
     };
   }
 

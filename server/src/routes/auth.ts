@@ -82,7 +82,7 @@ class AuthRoute {
 
   public getRoute(): Object {
     return {
-      name: "scraper",
+      name: "auth",
       register: (server: Server) => server.route(this.routes),
     }
   }

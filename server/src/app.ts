@@ -7,11 +7,12 @@ import * as Inert from "@hapi/inert";
 import { AuthMiddleware, RouteLogger } from "./middleware";
 import { Route } from "./routes";
 import { Constant } from "./config";
+import { IUser } from "./interfaces";
 
 // This will add the user to hapi.
 declare module "@hapi/hapi" {
   export interface Request {
-    user?: Object
+    user?: IUser
   }
 }
 

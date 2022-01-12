@@ -16,15 +16,18 @@ export class AuthMiddleware {
     this.responseHelper = new ResponseHelper();
   }
 
-  public middleware(server: Server): any {
+  public middleware = (server: Server): any => {
+
+    const userHelper: UserHelper = this.userHelper;
+    const responseHelper: ResponseHelper = this.responseHelper;
+
     return {
-      authenticate: async (request: Request, h: ResponseToolkit): Promise<ResponseObject | symbol> => {
+
+      async authenticate(request: Request, h: ResponseToolkit): Promise<ResponseObject | symbol> {
         try {
 
           const { authorization } = request.headers;
-
-          const decoded: { id: number } = JSON.parse(this.userHelper.verifyToken(authorization) as string);
-
+          const decoded: { id: number } = userHelper.verifyToken(authorization) as { id: number };
           const userFound: IUser = await user.findUnique({
             where: {
               id: decoded.id,
@@ -35,14 +38,14 @@ export class AuthMiddleware {
           });
 
           if (!userFound) {
-            return this.responseHelper.error(h, "AUTH403").takeover();
+            return responseHelper.error(h, "AUTH403").takeover();
           }
 
           request.user = userFound;
           return h.continue;
 
         } catch (err) {
-          return this.responseHelper.error(h, "SERVER500", err).takeover();
+          return responseHelper.error(h, "SERVER500", err).takeover();
         }
       },
     }
