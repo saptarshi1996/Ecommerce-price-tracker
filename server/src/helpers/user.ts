@@ -1,4 +1,4 @@
-import { sign, verify } from "jsonwebtoken";
+import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { compareSync, hashSync, genSaltSync } from "bcryptjs";
 import { Constant } from "../config";
 
@@ -20,8 +20,19 @@ export class UserHelper {
 
   public createToken(payload: string): string {
     try {
-      const secret = this.constant.getEnvironmentByKey("JWT_SECRET");
+      const secret: string = this.constant.getEnvironmentByKey("JWT_SECRET");
       return sign(payload, secret);
+    } catch (ex) {
+      throw new Error(ex);
+    }
+  }
+
+  public verifyToken(token: string): string | JwtPayload { 
+    try {
+
+      const secret: string = this.constant.getEnvironmentByKey("JWT_SECRET");
+      return verify(token, secret);
+
     } catch (ex) {
       throw new Error(ex);
     }

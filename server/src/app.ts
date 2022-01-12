@@ -4,8 +4,16 @@ import * as HapiSwagger from 'hapi-swagger';
 import * as Vision from "@hapi/vision";
 import * as Inert from "@hapi/inert";
 
+import { AuthMiddleware, RouteLogger } from "./middleware";
 import { Route } from "./routes";
 import { Constant } from "./config";
+
+// This will add the user to hapi.
+declare module "@hapi/hapi" {
+  export interface Request {
+    user?: Object
+  }
+}
 
 export class Application {
 
@@ -13,6 +21,8 @@ export class Application {
   private swaggerOptions: HapiSwagger.RegisterOptions;
 
   private constant: Constant;
+  private authMiddleware: AuthMiddleware;
+  private routeLogger: RouteLogger;
 
   constructor() {
 
@@ -36,6 +46,9 @@ export class Application {
       swaggerUIPath: '/api/swagger/ui',
       schemes: ['https', 'http'],
     };
+
+    this.routeLogger = new RouteLogger();
+    this.authMiddleware = new AuthMiddleware();
 
   }
 
@@ -64,14 +77,26 @@ export class Application {
         prefix: '/api'
       }
     });
-  } 
+  }
+
+  private async setupMiddleware() {
+
+    // logger
+    this.server.ext('onRequest', this.routeLogger.middleware);
+
+    // Auth middleware
+    this.server.auth.scheme("custom", this.authMiddleware.middleware);
+    this.server.auth.strategy("default", "custom");
+    this.server.auth.default("default");
+  }
 
   public async start(): Promise<void> {
 
     // Load setters.
+    await this.setupMiddleware();
     await this.setRoute();
     await this.setPlugin();
-    
+
     // Start server
     console.log(`Server on port ${this.constant.getEnvironmentByKey("PORT")}`);
     await this.server.start();
