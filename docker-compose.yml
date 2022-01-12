@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  ecommerce_server:
+  ecommerce_scraper_server:
 
     working_dir: /usr/src/app
 
@@ -12,7 +12,7 @@ services:
     
     restart: always
 
-    container_name: ecommerce_server
+    container_name: ecommerce_scraper_server
 
     ports:
       - "8081:8081"
@@ -20,4 +20,5 @@ services:
     expose:
       - "8081"
 
-    command: "bash -c npm run start"
+    # this command will import db and run the server.
+    command: "bash -c npx primsa migrate dev && npm run start" 
