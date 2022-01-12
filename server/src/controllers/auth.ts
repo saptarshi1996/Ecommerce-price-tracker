@@ -1,7 +1,7 @@
 import { Request, ResponseObject, ResponseToolkit } from "@hapi/hapi";
 
 import { PrismaClient } from "@prisma/client";
-const { user } = new PrismaClient();
+const { user, userVerification } = new PrismaClient();
 
 import { ResponseHelper, UserHelper } from "../helpers";
 import { IUserLogin, IUser, IUserRegister } from "../interfaces";
@@ -50,7 +50,10 @@ export class AuthController {
         "id": userExists.id,
       }));
 
-      return this.responseHelper.success(h, "USERLOGIN200");
+      return this.responseHelper.success(h, "USERLOGIN200", {
+        "token": token,
+      });
+      
     } catch (ex) {
       return this.responseHelper.error(h, "SERVER500", ex);
     }
@@ -89,7 +92,17 @@ export class AuthController {
         }
       });
 
-      console.log(userCreated);
+      const otp: number = this.userHelper.generateOtp();
+
+      // create a record in user verification with the user for future references.
+      await userVerification.create({
+        data: {
+          user_id: userCreated.id,
+          is_revoked: false,
+          created_at: new Date(),
+          otp,
+        },
+      });
 
       return this.responseHelper.success(h, "USERREGISTER200");
 

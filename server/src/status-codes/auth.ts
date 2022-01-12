@@ -5,4 +5,7 @@ export const Auth = {
   "USERINVALIDPASSWORD400": "User Password incorrect",
   "USERNOTVERIFIED403": "User not verified",
 
+  "USERALREADYEXISTS400": "User already exists",
+  "USERREGISTER200": "User registered successfully",
+
 };

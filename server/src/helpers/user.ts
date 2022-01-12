@@ -21,12 +21,14 @@ export class UserHelper {
   public createToken(payload: string): string {
     try {
       const secret = this.constant.getEnvironmentByKey("JWT_SECRET");
-      return sign(payload, secret, {
-        expiresIn: "1d",
-      });
+      return sign(payload, secret);
     } catch (ex) {
       throw new Error(ex);
     }
+  }
+
+  public generateOtp(): number { 
+    return Math.floor(100000 + Math.random() * 900000);
   }
 
 }

@@ -18,5 +18,19 @@ model User {
   password    String   @db.VarChar(255)
   is_verified Boolean? @default(false)
 
+  user_verification UserVerification[]
+
   @@map("users")
+}
+
+model UserVerification {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.DateTime()
+  is_revoked Boolean?  @default(false)
+  otp Int @db.Int()
+
+  user    User @relation(fields: [user_id], references: [id])
+  user_id Int  @unique
+
+  @@map("user_verifications")
 }
