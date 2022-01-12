@@ -35,3 +35,19 @@ model UserVerification {
 
   @@map("user_verifications")
 }
+
+// model EcommerceSite {
+
+// }
+
+// model Link { 
+
+// }
+
+// model Product {
+
+// }
+
+// model UserProduct { 
+
+// }
