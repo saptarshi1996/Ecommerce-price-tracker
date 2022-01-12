@@ -1,7 +1,12 @@
 import { Server } from "@hapi/hapi";
 
-import { UserLoginValidation, UserRegisterValidation } from "../validations";
 import { AuthController } from "../controllers";
+import { 
+  UserLoginValidation, 
+  UserRegisterValidation, 
+  UserVerificationValidation,
+  UserResendValidation,
+} from "../validations";
 
 class AuthRoute {
 
@@ -11,12 +16,16 @@ class AuthRoute {
 
   private readonly userRegisterValidation: UserRegisterValidation;
   private readonly userLoginValidation: UserLoginValidation;
+  private readonly userVerificationValidation: UserVerificationValidation;
+  private readonly userResendValidation: UserResendValidation;
 
   constructor() {
     this.authController = new AuthController();
 
     this.userRegisterValidation = new UserRegisterValidation();
     this.userLoginValidation = new UserLoginValidation();
+    this.userVerificationValidation = new UserVerificationValidation();
+    this.userResendValidation = new UserResendValidation();
 
     this.tags = ["api", "auth"];
     this.setRoute();
@@ -45,6 +54,28 @@ class AuthRoute {
           handler: this.authController.userRegister,
           validate: this.userRegisterValidation.getSchema(),
         }
+      },
+      {
+        method: "POST",
+        path: "/auth/verify",
+        config: {
+          auth: false,
+          tags: this.tags,
+          description: "User verify Controller",
+          handler: this.authController.verifyUser,
+          validate: this.userVerificationValidation.getSchema(),
+        },
+      },
+      {
+        method: "POST",
+        path: "/auth/resend",
+        config: {
+          auth: false,
+          tags: this.tags,
+          description: "User resend controller",
+          handler: this.authController.resendToken,
+          validate: this.userResendValidation.getSchema(),
+        },
       },
     ];
   }

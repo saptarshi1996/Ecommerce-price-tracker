@@ -8,4 +8,10 @@ export interface IUserRegister {
   last_name: string;
   email: string;
   password: string; 
+  otp: number;
 };
+
+export interface IUserVerify { 
+  email: string;
+  otp: number;
+}

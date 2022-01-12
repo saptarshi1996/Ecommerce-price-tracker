@@ -6,3 +6,10 @@ export interface IUser {
   password?: string;
   is_verified?: boolean;
 }
+
+export interface IUserVerification {
+  id?: number;
+  created_at?: Date;
+  is_revoked?: boolean;
+  user_id?: number;
+}

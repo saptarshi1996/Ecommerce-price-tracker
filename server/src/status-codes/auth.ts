@@ -8,4 +8,9 @@ export const Auth = {
   "USERALREADYEXISTS400": "User already exists",
   "USERREGISTER200": "User registered successfully",
 
+  "USERVERIFICATIONFOUND404": "User verification does not exists",
+  "USERVERIFIED200": "User verified successfully",
+
+  "USERRESEND200": "User code sent successfully",
+
 };
