@@ -1,0 +1,44 @@
+{
+  "name": "ecommerce-price-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run lint && npm run build",
+    "start": "node .",
+    "lint": "eslint . --ext .ts",
+    "dev": "npm run lint && npx nodemon src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saptarshi1996/Ecommerce-price-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saptarshi1996/Ecommerce-price-tracker/issues"
+  },
+  "homepage": "https://github.com/saptarshi1996/Ecommerce-price-tracker#readme",
+  "devDependencies": {
+    "@types/hapi__hapi": "^20.0.10",
+    "@types/hapi__inert": "^5.2.3",
+    "@types/hapi__vision": "^5.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "eslint": "^8.10.0",
+    "prisma": "^3.10.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.2.1",
+    "@hapi/inert": "^6.0.5",
+    "@hapi/vision": "^6.1.0",
+    "@prisma/client": "^3.10.0",
+    "dotenv": "^16.0.0",
+    "hapi-swagger": "^14.2.5"
+  }
+}

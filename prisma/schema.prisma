@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String   @db.VarChar(255)
+  lastName  String?  @db.VarChar(255)
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  isActive  Boolean? @default(false)
+
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  deletedAt DateTime? @db.Timestamp(6)
+  updatedAt DateTime? @db.Timestamp(6)
+
+  @@map("users")
+}
+
+model UserRegistration {
+  id        Int       @id @default(autoincrement())
+  otp       Int       @db.Int()
+  isRevoked Boolean?  @default(false) @db.TinyInt
+  expiresAt DateTime? @db.Timestamp(6)
+
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  deletedAt DateTime? @db.Timestamp(6)
+  updatedAt DateTime? @db.Timestamp(6)
+
+  @@map("user_registrations")
+}
