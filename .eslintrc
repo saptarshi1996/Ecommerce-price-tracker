@@ -25,6 +25,8 @@
       "single"
     ],
     "@typescript-eslint/no-explicit-any": "off",
-    "camelcase": "error"
+    "camelcase": "error",
+    "no-var": "warn",
+    "no-unused-vars": "error"
   }
 }

@@ -1,7 +1,8 @@
 import { config } from 'dotenv'
+import { IConstant } from '../interfaces'
 config()
 
-export const Constant: Record<string, Record<string, unknown>> = {
+export const Constant: IConstant = {
 
   'environment': {
     'PORT': process.env.PORT,

@@ -4,9 +4,9 @@ export interface IUser {
   lastName?: string
   email?: string
   password?: string
-  isActive?: string
+  isActive?: boolean
 
-  createdAt?: string
-  updatedAt?: string
-  deletedAt?: string
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
 }

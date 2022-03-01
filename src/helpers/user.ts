@@ -1,0 +1,14 @@
+import { } from 'jsonwebtoken'
+import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
+
+export const hashPassword = (password: string): string => {
+  return hashSync(password, genSaltSync(10))
+}
+
+export const comparePassword = (password: string, hash: string): boolean => {
+  return compareSync(password, hash)
+}
+
+export const generateOtp = (): number => {
+  return Math.floor(100000 + Math.random() * 900000)
+}

@@ -9,7 +9,8 @@
     "start": "node .",
     "lint": "eslint . --ext .ts",
     "dev": "npm run lint && npx nodemon src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-build": "npm run lint && tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,11 @@
   },
   "homepage": "https://github.com/saptarshi1996/Ecommerce-price-tracker#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/hapi__hapi": "^20.0.10",
     "@types/hapi__inert": "^5.2.3",
     "@types/hapi__vision": "^5.5.3",
+    "@types/jsonwebtoken": "^8.5.8",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "eslint": "^8.10.0",
@@ -38,7 +41,9 @@
     "@hapi/inert": "^6.0.5",
     "@hapi/vision": "^6.1.0",
     "@prisma/client": "^3.10.0",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.0",
-    "hapi-swagger": "^14.2.5"
+    "hapi-swagger": "^14.2.5",
+    "jsonwebtoken": "^8.5.1"
   }
 }

@@ -1,13 +1,19 @@
 import { Server, ServerRegisterPluginObject } from '@hapi/hapi'
 
-import HapiSwagger from 'hapi-swagger'
+import HapiSwagger, { RegisterOptions } from 'hapi-swagger'
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 
 import { Constant } from './config'
 import { routes } from './routes'
+import { IUser } from './interfaces'
 
 // Override hapi user
+declare module '@hapi/hapi' {
+  export interface Request {
+    user?: IUser
+  }
+}
 
 export const Application = async (): Promise<void> => {
 
@@ -19,7 +25,7 @@ export const Application = async (): Promise<void> => {
     },
   })
 
-  const swaggerOptions: HapiSwagger.RegisterOptions = {
+  const swaggerOptions: RegisterOptions = {
     info: {
       title: 'Ecommerce Tracker API Documentation',
       version: '1.0.0.0',
