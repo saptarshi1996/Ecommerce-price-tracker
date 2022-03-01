@@ -1,5 +1,7 @@
-import { } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
+
+import { Constant } from '../config'
 
 export const hashPassword = (password: string): string => {
   return hashSync(password, genSaltSync(10))
@@ -11,4 +13,10 @@ export const comparePassword = (password: string, hash: string): boolean => {
 
 export const generateOtp = (): number => {
   return Math.floor(100000 + Math.random() * 900000)
+}
+
+export const createToken = (payload: string): string => {
+  return sign(payload, Constant.environment.JWT_SECRET, {
+    expiresIn: '1d'
+  })
 }

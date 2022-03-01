@@ -12,6 +12,7 @@ import {
   comparePassword,
   hashPassword,
   generateOtp,
+  createToken,
 } from '../helpers'
 
 const prisma = new PrismaClient()
@@ -25,14 +26,14 @@ const prisma = new PrismaClient()
 export const userLogin = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
 
-    const userLogin = req.payload as {
+    const userLoginPayload = req.payload as {
       email: string,
       password: string,
     }
 
     const userExists: IUser = await prisma.user.findFirst({
       where: {
-        email: userLogin.email,
+        email: userLoginPayload.email,
       },
       select: {
         id: true,
@@ -45,12 +46,19 @@ export const userLogin = async (req: Request, h: ResponseToolkit): Promise<Respo
     }
 
     // Check if the password is correct
-    const passwordValid = comparePassword(userLogin.password, userExists.password)
+    const passwordValid = comparePassword(userLoginPayload.password, userExists.password)
     if (!passwordValid) {
       return error(h, 'PASSWORDINVALID403')
     }
 
-    return success(h, 'USERLOGIN200')
+    // Generate jwt token
+    const token = createToken(JSON.stringify({
+      id: userExists.id,
+    }))
+
+    return success(h, 'USERLOGIN200', {
+      token,
+    })
 
   } catch (ex) {
     return error(h, 'SERVER500', ex)
@@ -99,11 +107,18 @@ export const userRegistration = async (req: Request, h: ResponseToolkit): Promis
       },
     })
 
-    // Create an object for user registration.
     const otp = generateOtp()
 
-    console.log(userModel)
-    console.log(otp)
+    // Create an object for user registration.
+    await prisma.userRegistration.create({
+      data: {
+        otp,
+        isRevoked: false,
+        userId: userModel.id,
+      },
+    })
+
+    // Send the otp via mail to user.
 
     return success(h, 'USERREGISTER200')
 
@@ -115,7 +130,31 @@ export const userRegistration = async (req: Request, h: ResponseToolkit): Promis
 export const userVerification = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
 
-    return success(h, '')
+    const userVerificationPayload = req.payload as {
+      email: string,
+      otp: number,
+    }
+
+    // Check if the user exists and has this otp.
+    const userExists: IUser = await prisma.user.findFirst({
+      where: {
+        email: userVerificationPayload.email,
+      },
+      select: {
+        id: true,
+        isActive: true,
+      }
+    })
+
+    if (!userExists) {
+      return error(h, 'USERNOTFOUND404')
+    }
+
+    if (userExists.isActive) {
+      return error(h, 'USERALREADYACTIVE400')
+    }
+
+    return success(h, 'USERVERIFIED200')
 
   } catch (ex) {
     return error(h, 'SERVER500', ex)
