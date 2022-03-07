@@ -1,8 +1,10 @@
 import { Plugin, Server, ServerRoute } from '@hapi/hapi'
 
 import {
+  resendVerificationToken,
   userLogin,
   userRegistration,
+  userVerification,
 } from '../controllers'
 
 import {
@@ -12,7 +14,8 @@ import {
 
 const tags: string[] = ['api', 'auth']
 
-export const authRoute: Plugin<unknown> = {
+export const authRoute: Plugin<Record<string, unknown>> = {
+
   'name': 'auth',
   'register': (server: Server) => {
 
@@ -38,7 +41,29 @@ export const authRoute: Plugin<unknown> = {
           handler: userRegistration,
           validate: userRegistrationValidation,
         },
-      }
+      },
+      {
+        method: 'POST',
+        path: '/auth/token/verify',
+        options: {
+          description: 'User token verification',
+          auth: false,
+          tags,
+          handler: userVerification,
+          validate: null,
+        },
+      },
+      {
+        method: 'POST',
+        path: '/auth/token/resend',
+        options: {
+          description: 'User token resend',
+          auth: false,
+          tags,
+          handler: resendVerificationToken,
+          validate: null,
+        },
+      },
     ]
 
     server.route(serverRoute)

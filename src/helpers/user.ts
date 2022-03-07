@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken'
+import { JwtPayload, sign, verify } from 'jsonwebtoken'
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs'
 
 import { Constant } from '../config'
@@ -19,4 +19,12 @@ export const createToken = (payload: string): string => {
   return sign(payload, Constant.environment.JWT_SECRET, {
     expiresIn: '1d'
   })
+}
+
+export const verifyToken = (token: string): string | JwtPayload => {
+  try {
+    return verify(token, Constant.environment.JWT_SECRET)
+  } catch (ex) {
+    throw new Error(ex.message)
+  }
 }

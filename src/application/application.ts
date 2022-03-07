@@ -4,9 +4,10 @@ import HapiSwagger, { RegisterOptions } from 'hapi-swagger'
 import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 
-import { Constant } from './config'
-import { routes } from './routes'
-import { IUser } from './interfaces'
+import { authMiddleware } from '../middlewares'
+import { Constant } from '../config'
+import { routes } from '../routes'
+import { IUser } from '../interfaces'
 
 // Override hapi user
 declare module '@hapi/hapi' {
@@ -15,7 +16,7 @@ declare module '@hapi/hapi' {
   }
 }
 
-export const Application = async (): Promise<void> => {
+export const Application = async (): Promise<Server> => {
 
   const PORT: number = +Constant.environment.PORT
   const server: Server = new Server({
@@ -24,6 +25,10 @@ export const Application = async (): Promise<void> => {
       cors: true,
     },
   })
+
+  server.auth.scheme('custom', authMiddleware)
+  server.auth.strategy('default', 'custom')
+  server.auth.default('default')
 
   const swaggerOptions: RegisterOptions = {
     info: {
@@ -71,5 +76,7 @@ export const Application = async (): Promise<void> => {
 
   console.log(`Server on port ${PORT}`)
   await server.start()
+
+  return server
 
 }

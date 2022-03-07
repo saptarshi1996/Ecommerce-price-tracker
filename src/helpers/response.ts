@@ -1,4 +1,4 @@
-import { ResponseToolkit } from '@hapi/hapi'
+import { ResponseObject, ResponseToolkit } from '@hapi/hapi'
 
 import { statusCode } from '../status-codes'
 import {
@@ -6,7 +6,7 @@ import {
   IStatus,
 } from '../interfaces'
 
-export const success = (h: ResponseToolkit, code: string, data?: Record<string, unknown>) => {
+export const success = (h: ResponseToolkit, code: string, data?: Record<string, unknown>): ResponseObject => {
 
   const responseObject: IResponse = {}
   const statusObject: IStatus = statusCode[code]
@@ -18,11 +18,11 @@ export const success = (h: ResponseToolkit, code: string, data?: Record<string, 
   }
 
   console.log(new Date().toISOString().slice(0, 19).replace('T', ' '), `${h.request.method.toUpperCase()} | ${h.request.url} -> ${statusObject.statusCode}`)
-  return h.response(responseObject).code(statusObject.statusCode)
+  return h.response(responseObject).code(statusObject.statusCode).takeover()
 
 }
 
-export const error = (h: ResponseToolkit, code: string, err?: any) => {
+export const error = (h: ResponseToolkit, code: string, err?: any): ResponseObject => {
 
   const responseObject: IResponse = {}
   const statusObject: IStatus = statusCode[code]
@@ -36,5 +36,5 @@ export const error = (h: ResponseToolkit, code: string, err?: any) => {
   }
 
   console.log(new Date().toISOString().slice(0, 19).replace('T', ' '), `${h.request.method.toUpperCase()} | ${h.request.url} -> ${statusObject.statusCode}`)
-  return h.response(responseObject).code(statusObject.statusCode)
+  return h.response(responseObject).code(statusObject.statusCode).takeover()
 }

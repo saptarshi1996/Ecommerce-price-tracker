@@ -3,7 +3,7 @@ import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
 import { PrismaClient } from '@prisma/client'
 
 import {
-  IUser,
+  IUser, IUserRegistration,
 } from '../interfaces'
 
 import {
@@ -69,7 +69,7 @@ export const userLogin = async (req: Request, h: ResponseToolkit): Promise<Respo
  * User Registration
  * @param req
  * @param h
- * @returns
+ * @returns { Promise }
  */
 export const userRegistration = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
@@ -154,6 +154,41 @@ export const userVerification = async (req: Request, h: ResponseToolkit): Promis
       return error(h, 'USERALREADYACTIVE400')
     }
 
+    const userRegistrationExists = await prisma.userRegistration.findFirst({
+      where: {
+        otp: userVerificationPayload.otp,
+        userId: userExists.id,
+        isRevoked: false,
+      },
+      select: {
+        id: true,
+      }
+    }) as IUserRegistration
+
+    if (!userRegistrationExists) {
+      return error(h, '')
+    }
+
+    // revoke the user registration object
+    await prisma.userRegistration.updateMany({
+      data: {
+        isRevoked: true,
+      },
+      where: {
+        userId: userExists.id,
+      }
+    })
+
+    // also user verify the user
+    await prisma.user.update({
+      data: {
+        isActive: true,
+      },
+      where: {
+        id: userExists.id,
+      }
+    })
+
     return success(h, 'USERVERIFIED200')
 
   } catch (ex) {
@@ -163,6 +198,52 @@ export const userVerification = async (req: Request, h: ResponseToolkit): Promis
 
 export const resendVerificationToken = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
+
+    const resendVerificationObject = req.payload as {
+      email: string
+    }
+
+    const userExists = await prisma.user.findFirst({
+      where: {
+        email: resendVerificationObject.email,
+      },
+      select: {
+        id: true,
+        isActive: true,
+      },
+    }) as IUser
+
+    // Does the user exists?
+    if (!userExists) {
+      return error(h, 'USERNOTFOUND404')
+    }
+
+    if (!userExists.isActive) {
+      return error(h, '')
+    }
+
+    // revoke all previous otp.
+    await prisma.userRegistration.updateMany({
+      data: {
+        isRevoked: true,
+      },
+      where: {
+        userId: userExists.id,
+      }
+    })
+
+    const otp = generateOtp()
+
+    // send the mail to user
+
+    // create a new record in registration
+    await prisma.userRegistration.create({
+      data: {
+        isRevoked: false,
+        userId: userExists.id,
+        otp,
+      },
+    })
 
     return success(h, '')
 
