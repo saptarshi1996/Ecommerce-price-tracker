@@ -18,21 +18,27 @@ services:
     depends_on:
       - ecommerce_database
 
-  # ecommerce_worker:
+  ecommerce_worker:
 
-  #   working_dir: /app
-  #   container_name: ecommerce_worker
-  #   restart: always
+    working_dir: /app
+    container_name: ecommerce_worker
+    restart: always
 
-  #   ports:
-  #     - 20010:20010
+    ports:
+      - 20010:20010
 
-  #   expose:
-  #     - 20010:20010
+    expose:
+      - 20010
 
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: ./workers
+    build:
+      dockerfile: Dockerfile
+      context: ./workers
+
+    depends_on:
+      - ecommerce_database
+      - ecommerce_server
+
+    command: bash -c "npm run start"
 
   ecommerce_database:
 

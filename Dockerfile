@@ -10,5 +10,4 @@ COPY . ./
 
 EXPOSE 8000 3306
 
-# RUN npx prisma db push
 RUN npm run build
