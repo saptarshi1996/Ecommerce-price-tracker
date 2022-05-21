@@ -12,7 +12,7 @@ import {
   userRegistrationValidation,
 } from '../validations'
 
-const tags: string[] = ['api', 'auth']
+const tags = ['api', 'auth']
 
 export const authRoute: Plugin<Record<string, unknown>> = {
 
