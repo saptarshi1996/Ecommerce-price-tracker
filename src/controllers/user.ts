@@ -6,6 +6,12 @@ const prisma = new PrismaClient()
 import { success, error } from '../helpers'
 import { IUser } from '../interfaces'
 
+/**
+ * Get user details
+ * @param req Request
+ * @param h Response
+ * @returns Promise
+ */
 export const getUserDetails = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
 

@@ -1,9 +1,14 @@
-import { Request, ResponseObject, ResponseToolkit } from '@hapi/hapi'
+import {
+  Request,
+  ResponseObject,
+  ResponseToolkit
+} from '@hapi/hapi'
 
 import { PrismaClient } from '@prisma/client'
 
 import {
-  IUser, IUserRegistration,
+  IUser,
+  IUserRegistration,
 } from '../interfaces'
 
 import {
@@ -127,6 +132,12 @@ export const userRegistration = async (req: Request, h: ResponseToolkit): Promis
   }
 }
 
+/**
+ * Confirm user verification
+ * @param req Request
+ * @param h Response
+ * @returns Promise
+ */
 export const userVerification = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
 
@@ -196,6 +207,12 @@ export const userVerification = async (req: Request, h: ResponseToolkit): Promis
   }
 }
 
+/**
+ * Resend verification token
+ * @param req Request
+ * @param h Response
+ * @returns Promise
+ */
 export const resendVerificationToken = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
 
