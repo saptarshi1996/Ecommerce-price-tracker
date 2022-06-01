@@ -5,10 +5,10 @@ import {
 } from '@hapi/hapi'
 
 import {
-  createNewProduct,
-  updateProduct,
   listProduct,
+  updateProduct,
   deleteProduct,
+  createNewProduct,
 } from '../controllers'
 
 const tags = ['api', 'product']

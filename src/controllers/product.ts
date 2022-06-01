@@ -2,7 +2,14 @@ import { Request, ResponseToolkit, ResponseObject } from '@hapi/hapi'
 
 import { PrismaClient } from '@prisma/client'
 
-import { success, error } from '../helpers'
+import {
+  error,
+  success,
+} from '../helpers'
+
+import {
+  IUser,
+} from '../interfaces'
 
 const prisma = new PrismaClient()
 
@@ -14,9 +21,7 @@ const prisma = new PrismaClient()
  */
 export const createNewProduct = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
-
     return success(h, '')
-
   } catch (ex) {
     return error(h, 'SERVER500', ex)
   }
@@ -30,7 +35,28 @@ export const createNewProduct = async (req: Request, h: ResponseToolkit): Promis
  */
 export const listProduct = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
+
+    const user = req.user as IUser
+
     return success(h, '')
+  } catch (ex) {
+    return error(h, 'SERVER500', ex)
+  }
+}
+
+/**
+ * Get product by id
+ * @param req Request
+ * @param h Response
+ * @returns Promise
+ */
+export const getProductById = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
+  try {
+
+    const { id } = req.params
+
+    return success(h, '')
+
   } catch (ex) {
     return error(h, 'SERVER500', ex)
   }
@@ -58,9 +84,7 @@ export const updateProduct = async (req: Request, h: ResponseToolkit): Promise<R
  */
 export const deleteProduct = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
-
     return success(h, '')
-
   } catch (ex) {
     return error(h, 'SERVER500', ex)
   }
