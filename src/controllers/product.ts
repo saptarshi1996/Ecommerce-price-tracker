@@ -11,7 +11,7 @@ import {
   IUser,
 } from '../interfaces'
 
-const prisma = new PrismaClient()
+const { product, url } = new PrismaClient()
 
 /**
  * Create a new product from url
@@ -37,6 +37,9 @@ export const listProduct = async (req: Request, h: ResponseToolkit): Promise<Res
   try {
 
     const user = req.user as IUser
+    const { id } = req.params as {
+      id: number
+    }
 
     return success(h, '')
   } catch (ex) {
@@ -84,6 +87,16 @@ export const updateProduct = async (req: Request, h: ResponseToolkit): Promise<R
  */
 export const deleteProduct = async (req: Request, h: ResponseToolkit): Promise<ResponseObject> => {
   try {
+    const { id } = req.params as {
+      id: number,
+    }
+
+    await url.delete({
+      where: {
+        id,
+      }
+    })
+
     return success(h, '')
   } catch (ex) {
     return error(h, 'SERVER500', ex)
