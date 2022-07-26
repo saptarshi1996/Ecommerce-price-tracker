@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
+    "start:scraper": "node scraper/index.js",
     "dev": "npx nodemon .",
+    "dev:scraper": "npx nodemon scraper/index.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
   },
