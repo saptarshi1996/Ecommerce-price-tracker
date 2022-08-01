@@ -16,4 +16,13 @@ exports.hashPassword = ({
 
 exports.generateToken = (id) => jwt.sign(id, JWT_SECRET);
 
+exports.verifyToken = (token) => new Promise((resolve, reject) => {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    resolve(decoded);
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
 exports.generateOtp = () => Math.floor(100000 + Math.random() * 900000);

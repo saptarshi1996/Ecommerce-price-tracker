@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 
+const authMiddleware = require('./middlewares/auth');
+
+const userRouter = require('./routes/user');
 const siteRouter = require('./routes/site');
 const authRouter = require('./routes/auth');
 
@@ -12,7 +15,8 @@ app.use(express.urlencoded({
   extended: false,
 }));
 
-app.use('/site', siteRouter);
+app.use('/user', authMiddleware, userRouter);
+app.use('/site', authMiddleware, siteRouter);
 app.use('/auth', authRouter);
 
 const PORT = process.env.PORT || 8443;

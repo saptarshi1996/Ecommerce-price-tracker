@@ -21,6 +21,26 @@ exports.findUser = (data) => new Promise(async (resolve, reject) => {
   }
 });
 
+exports.findUserById = (id) => new Promise(async (resolve, reject) => {
+  try {
+    const userFound = await user.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        createdAt: true,
+      }
+    });
+    resolve(userFound);
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
 exports.createUser = (data) => new Promise(async (resolve, reject) => {
   try {
     const userCreated = await user.create({ data });
