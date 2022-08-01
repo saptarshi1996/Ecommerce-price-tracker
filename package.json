@@ -1,0 +1,29 @@
+{
+  "name": "ecommerce-price-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node .",
+    "dev": "npx nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saptarshi1996/Ecommerce-price-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saptarshi1996/Ecommerce-price-tracker/issues"
+  },
+  "homepage": "https://github.com/saptarshi1996/Ecommerce-price-tracker#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "typescript": "^4.7.4"
+  }
+}
