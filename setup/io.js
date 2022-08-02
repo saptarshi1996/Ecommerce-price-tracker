@@ -17,10 +17,12 @@ io.on('connection', (socket) => {
   });
 });
 
-exports.emitToUser = ({
-  socketId,
+exports.emitToUser = async ({
+  userId,
   event,
   data,
 }) => {
-  Promise.resolve(io.to(socketId).emit(event, data));
+  const socket = await userDao.getSocketIdForUser({ userId });
+  socket.forEach((id) => io.to(id).emit(event, data));
+  Promise.resolve();
 };

@@ -17,6 +17,16 @@ app.use(express.urlencoded({
   extended: false,
 }));
 
+app.post('/testAmazon', (req, res) => {
+  const { url } = req.body;
+
+  require('../config/bull').queues.SCRAPER_AMAZON.add({
+    url,
+  });
+
+  return res.json('done');
+});
+
 app.use('/user', authMiddleware, userRouter);
 app.use('/site', authMiddleware, siteRouter);
 app.use('/auth', authRouter);
