@@ -3,6 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const {
   user,
   userAuthentication,
+  userSocket,
 } = new PrismaClient();
 
 exports.findUser = (data) => new Promise(async (resolve, reject) => {
@@ -99,6 +100,64 @@ exports.verifyUser = ({ userId }) => new Promise(async (resolve, reject) => {
       },
       data: {
         isVerified: true,
+      }
+    });
+    resolve();
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
+exports.createSocketConnection = ({
+  userId,
+  socketId,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    await userSocket.create({
+      data: {
+        userId,
+        socketId,
+        isActive: true,
+      },
+    });
+    resolve();
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
+exports.getSocketIdForUser = ({
+  userId,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    const socketId = await userSocket.findMany({
+      where: {
+        userId,
+        isActive: true,
+      },
+      select: {
+        socketId: true,
+      },
+    });
+
+    resolve(socketId.map((socket) => socket.socketId));
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
+exports.closeSocketConnection = ({
+  userId,
+  socketId,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    await userSocket.updateMany({
+      where: {
+        userId,
+        socketId,
+      },
+      data: {
+        isActive: false,
       }
     });
     resolve();
