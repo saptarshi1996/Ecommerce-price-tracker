@@ -26,6 +26,8 @@ model User {
   deletedAt DateTime?
 
   authentication UserAuthentication[]
+  userProduct UserProduct[]
+  userSocket UserSocket[]
 
   @@map("users")
 }
@@ -58,5 +60,83 @@ model Site {
   updatedAt DateTime?
   deletedAt DateTime?
 
+  product Product[]
+
   @@map("sites")
+}
+
+model Url {
+
+  id Int @id @default(autoincrement())
+
+  link String
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  product Product?
+
+  @@map("urls")
+}
+
+model Product {
+
+  id Int @id @default(autoincrement())
+
+  name String
+
+  currentPrice Float
+  lowestPrice Float
+
+  siteId Int
+  site Site @relation(fields: [siteId], references: [id])
+
+  urlId Int @unique
+  url Url @relation(fields: [urlId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  userProduct UserProduct[]
+
+  @@map("products")
+
+}
+
+model UserProduct {
+
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("user_products")
+
+}
+
+model UserSocket {
+
+  id Int @id @default(autoincrement())
+
+  socketId String
+  
+  isActive Boolean? @default(true)
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("user_sockets")
 }
