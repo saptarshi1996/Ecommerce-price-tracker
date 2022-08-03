@@ -7,7 +7,11 @@ const {
   REDIS_PORT,
 } = process.env;
 
-const queueList = ['SCRAPER_AMAZON'];
+const queueList = [
+  'SCRAPER_AMAZON',
+  'USER_SCRAPER_MASTER',
+  'USER_SCRAPER_CHILD',
+];
 
 const queues = {};
 queueList.forEach((queue) => {

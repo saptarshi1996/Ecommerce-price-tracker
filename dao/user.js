@@ -147,13 +147,11 @@ exports.getSocketIdForUser = ({
 });
 
 exports.closeSocketConnection = ({
-  userId,
   socketId,
 }) => new Promise(async (resolve, reject) => {
   try {
     await userSocket.updateMany({
       where: {
-        userId,
         socketId,
       },
       data: {

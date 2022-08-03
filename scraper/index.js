@@ -10,3 +10,4 @@ const HOST = process.env.WORKER_HOST;
 app.listen(PORT, HOST, () => console.log(`Worker on PORT ${PORT}`));
 
 require('./jobs/amazon');
+require('./jobs/user-scraper');

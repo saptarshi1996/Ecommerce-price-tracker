@@ -10,15 +10,15 @@ queues.SCRAPER_AMAZON.process(async (job, done) => {
       name,
       image,
       price,
-    } = scrapeAmazon({
+    } = await scrapeAmazon({
       url,
     });
 
     const urlCreated = await siteDao.saveUrl({ link: url });
     const productCreated = await siteDao.saveProduct({
       name,
-      currentPrice: price,
-      lowestPrice: price,
+      currentPrice: +price,
+      lowestPrice: +price,
       siteId,
       urlId: urlCreated.id,
       image,

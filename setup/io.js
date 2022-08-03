@@ -12,8 +12,11 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('disconnected', (reason) => {
+  socket.on('disconnected', async (reason) => {
     console.log(reason);
+    await userDao.closeSocketConnection({
+      socketId: socket.id,
+    });
   });
 });
 

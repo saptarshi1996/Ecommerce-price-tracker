@@ -18,12 +18,19 @@ app.use(express.urlencoded({
 }));
 
 app.post('/testAmazon', (req, res) => {
-  const { url } = req.body;
+  const { url, siteId, userId } = req.body;
 
   require('../config/bull').queues.SCRAPER_AMAZON.add({
     url,
+    siteId,
+    userId,
   });
 
+  return res.json('done');
+});
+
+app.get('/testUser', (req, res) => {
+  require('../config/bull').queues.USER_SCRAPER_MASTER.add({});
   return res.json('done');
 });
 
