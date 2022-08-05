@@ -1,10 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 
 const {
+  url,
   site,
   product,
   userProduct,
-  url,
 } = new PrismaClient();
 
 exports.getSites = () => new Promise(async (resolve, reject) => {

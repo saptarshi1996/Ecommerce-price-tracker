@@ -9,8 +9,8 @@ const {
 
 const queueList = [
   'SCRAPER_AMAZON',
-  'USER_SCRAPER_MASTER',
   'USER_SCRAPER_CHILD',
+  'USER_SCRAPER_MASTER',
 ];
 
 const queues = {};

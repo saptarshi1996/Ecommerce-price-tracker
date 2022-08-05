@@ -2,8 +2,8 @@ const { PrismaClient } = require('@prisma/client');
 
 const {
   user,
-  userAuthentication,
   userSocket,
+  userAuthentication,
 } = new PrismaClient();
 
 exports.findUser = (data) => new Promise(async (resolve, reject) => {
