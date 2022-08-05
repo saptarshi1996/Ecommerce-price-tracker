@@ -7,6 +7,7 @@ const authMiddleware = require('../middlewares/auth');
 const userRouter = require('../routes/user');
 const siteRouter = require('../routes/site');
 const authRouter = require('../routes/auth');
+const productRouter = require('../routes/product');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,6 +37,8 @@ app.get('/testUser', (req, res) => {
 
 app.use('/user', authMiddleware, userRouter);
 app.use('/site', authMiddleware, siteRouter);
+app.use('/product', authMiddleware, productRouter);
+
 app.use('/auth', authRouter);
 
 module.exports = server;
