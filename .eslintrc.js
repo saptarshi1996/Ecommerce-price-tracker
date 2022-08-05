@@ -17,7 +17,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-multi-assign': 0,
     'global-require': 0,
-    camelcase: 'off',
+    camelcase: 'error',
     'max-len': 0,
     'no-console': 0,
     'linebreak-style': 0,
