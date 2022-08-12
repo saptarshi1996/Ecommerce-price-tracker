@@ -1,5 +1,5 @@
+async function loadUpdatePrice() {
+  console.log('Load price');
+}
 
-// Update prices of objects regularly for every user.
-(async () => {
-
-})();
+loadUpdatePrice();
