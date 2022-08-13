@@ -1,14 +1,14 @@
-const { queues } = require('../../config/bull');
+const queue = require('../../config/bull');
 
 const siteDao = require('../../dao/site');
 const { scrapeAmazon } = require('../../helpers/scraper');
 
-queues.USER_SCRAPER_MASTER.process(async (_, done) => {
+queue.USER_SCRAPER_MASTER.process(async (_, done) => {
   try {
     const urls = await siteDao.getAllUrls();
     console.log(urls);
     urls.forEach((url) => {
-      queues.USER_SCRAPER_CHILD.add({
+      queue.USER_SCRAPER_CHILD.add({
         url,
       });
     });
@@ -20,7 +20,7 @@ queues.USER_SCRAPER_MASTER.process(async (_, done) => {
   }
 });
 
-queues.USER_SCRAPER_CHILD.process(async (job, done) => {
+queue.USER_SCRAPER_CHILD.process(async (job, done) => {
   try {
     const { url } = job.data;
     const { price } = await scrapeAmazon({

@@ -1,9 +1,9 @@
-const { queues } = require('../../config/bull');
+const queue = require('../../config/bull');
 
 const siteDao = require('../../dao/site');
 const { scrapeAmazon } = require('../../helpers/scraper');
 
-queues.SCRAPER_AMAZON.process(async (job, done) => {
+queue.SCRAPER_AMAZON.process(async (job, done) => {
   try {
     const { url, userId, siteId } = job.data;
     const {

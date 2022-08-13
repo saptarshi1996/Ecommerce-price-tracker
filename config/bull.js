@@ -24,6 +24,4 @@ queueList.forEach((queue) => {
   });
 });
 
-module.exports = {
-  queues,
-};
+module.exports = queues;
