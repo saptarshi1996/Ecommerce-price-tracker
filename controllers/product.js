@@ -7,7 +7,7 @@ exports.getUserProducts = async (req, res) => {
     });
     return res.status(200).json(products);
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -20,7 +20,7 @@ exports.getUserProduct = async (req, res) => {
     });
     return res.status(200).json(product);
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -35,7 +35,7 @@ exports.deleteUserProduct = async (req, res) => {
       message: 'User Product deleted successfully',
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }

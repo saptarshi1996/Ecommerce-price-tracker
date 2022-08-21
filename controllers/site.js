@@ -5,7 +5,7 @@ exports.getSite = async (_, res) => {
     const sites = await siteDao.getSites();
     res.status(200).json(sites);
   } catch (ex) {
-    res.status(500).json({
+    res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
