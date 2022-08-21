@@ -1,6 +1,10 @@
 const userDao = require('../dao/user');
 const authHelper = require('../helpers/auth');
 
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+const UnAuthenticatedError = require('../errors/UnAuthenticatedError');
+
 exports.userLogin = async (req, res) => {
   try {
     const userPayload = req.body;
@@ -10,11 +14,11 @@ exports.userLogin = async (req, res) => {
     });
 
     if (!userExists) {
-      throw new Error('User does not exists');
+      throw new NotFoundError('User does not exists');
     }
 
     if (!userExists.isVerified) {
-      throw new Error('User not verified');
+      throw new BadRequestError('User not verified');
     }
 
     const passwordMatch = authHelper.checkPassword({
@@ -23,7 +27,7 @@ exports.userLogin = async (req, res) => {
     });
 
     if (!passwordMatch) {
-      throw new Error('Password does not match');
+      throw new BadRequestError('Password does not match');
     }
 
     const token = authHelper.generateToken(userExists.id);
@@ -31,7 +35,7 @@ exports.userLogin = async (req, res) => {
       token,
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -46,7 +50,7 @@ exports.userRegister = async (req, res) => {
     });
 
     if (userExists) {
-      throw new Error('User already exists');
+      throw new BadRequestError('User already exists');
     }
 
     const userObject = {
@@ -77,7 +81,7 @@ exports.userRegister = async (req, res) => {
       message: 'User created successfully',
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -96,11 +100,11 @@ exports.verifyUser = async (req, res) => {
     });
 
     if (!userExists) {
-      throw new Error('User does not exists');
+      throw new NotFoundError('User does not exists');
     }
 
     if (userExists.isVerified) {
-      throw new Error('User already verified');
+      throw new BadRequestError('User already verified');
     }
 
     // Check if the otp exists for this user.
@@ -111,7 +115,7 @@ exports.verifyUser = async (req, res) => {
     });
 
     if (!userAuthenticationFound) {
-      throw new Error('User Authentication does not exists');
+      throw new UnAuthe('User Authentication does not exists');
     }
 
     // Revoke all user authentications
@@ -124,7 +128,7 @@ exports.verifyUser = async (req, res) => {
       message: 'User verified successfully',
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
@@ -142,11 +146,11 @@ exports.resendToken = async (req, res) => {
     });
 
     if (!userExists) {
-      throw new Error('User does not exists');
+      throw new NotFoundError('User does not exists');
     }
 
     if (userExists.isVerified) {
-      throw new Error('User already verified');
+      throw new UnAuthenticatedError('User already verified');
     }
 
     // Revoke all user authentications
@@ -169,7 +173,7 @@ exports.resendToken = async (req, res) => {
       message: 'User otp sent successfully',
     });
   } catch (ex) {
-    return res.status(500).json({
+    return res.status(ex.statusCode || 500).json({
       message: ex.message,
     });
   }
