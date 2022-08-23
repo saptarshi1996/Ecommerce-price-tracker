@@ -156,6 +156,7 @@ exports.resendToken = async (req, res) => {
     // Revoke all user authentications
     await userDao.updateUserAuthenticationRevoke({ userId: userExists.id });
 
+    // Check date with current date for expiry.
     const createdAt = new Date();
     const expiresAt = new Date(createdAt.getTime() + 5 * 60000);
     const otp = authHelper.generateOtp();
