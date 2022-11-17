@@ -1,7 +1,19 @@
-const server = require('./setup/app');
+require('dotenv').config();
 
-const PORT = process.env.PORT || 8443;
-const HOST = process.env.HOST || '0.0.0.0';
-server.listen(PORT, HOST, () => console.log(`Server on PORT ${PORT}`));
+const express = require('express');
+const cors = require('cors');
 
-require('./setup/io');
+const userRoute = require('./routes/user');
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: false,
+}));
+app.use(cors());
+
+app.use('/auth', userRoute);
+
+const PORT = +process.env.PORT;
+app.listen(PORT, () => console.log(`Server on PORT ${PORT}`));

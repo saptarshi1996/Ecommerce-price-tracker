@@ -1,164 +1,117 @@
 const { PrismaClient } = require('@prisma/client');
 
 const {
-  user,
-  userSocket,
-  userAuthentication,
+  user: User,
+  userVerification: UserVerification,
 } = new PrismaClient();
 
-exports.findUser = (data) => new Promise(async (resolve, reject) => {
+exports.findUser = ({
+  where,
+  select,
+}) => new Promise(async (resolve, reject) => {
   try {
-    const userFound = await user.findFirst({
-      where: data,
-      select: {
-        id: true,
-        isVerified: true,
-        password: true,
-      }
+    console.log(where);
+    console.log(select);
+    const userExists = await User.findFirst({
+      where,
+      select,
     });
-    resolve(userFound);
+
+    console.log(userExists);
+
+    resolve(userExists);
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
-exports.findUserById = (id) => new Promise(async (resolve, reject) => {
+exports.createUser = ({
+  data,
+}) => new Promise(async (resolve, reject) => {
   try {
-    const userFound = await user.findFirst({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        createdAt: true,
-      }
+    const userCreated = await User.create({
+      data,
     });
-    resolve(userFound);
-  } catch (ex) {
-    reject(new Error(ex.message));
-  }
-});
 
-exports.createUser = (data) => new Promise(async (resolve, reject) => {
-  try {
-    const userCreated = await user.create({ data });
     resolve(userCreated);
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
-exports.createUserAuthenticatipn = (data) => new Promise(async (resolve, reject) => {
-  try {
-    const userAuthenticationCreated = await userAuthentication.create({ data });
-    resolve(userAuthenticationCreated);
-  } catch (ex) {
-    reject(new Error(ex.message));
-  }
-});
-
-exports.findUserAuthentication = (data) => new Promise(async (resolve, reject) => {
-  try {
-    const userAuthenticationFound = await userAuthentication.findFirst({
-      where: data,
-      select: {
-        id: true,
-        isRevoked: true,
-      },
-    });
-    resolve(userAuthenticationFound);
-  } catch (ex) {
-    reject(new Error(ex.message));
-  }
-});
-
-exports.updateUserAuthenticationRevoke = ({ userId }) => new Promise(async (resolve, reject) => {
-  try {
-    await userAuthentication.updateMany({
-      where: {
-        userId,
-        isRevoked: false,
-      },
-      data: {
-        isRevoked: true,
-      }
-    });
-    resolve();
-  } catch (ex) {
-    reject(new Error(ex.message));
-  }
-});
-
-exports.verifyUser = ({ userId }) => new Promise(async (resolve, reject) => {
-  try {
-    await user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        isVerified: true,
-      }
-    });
-    resolve();
-  } catch (ex) {
-    reject(new Error(ex.message));
-  }
-});
-
-exports.createSocketConnection = ({
-  userId,
-  socketId,
+exports.updateUser = ({
+  data,
+  where,
+  many = false,
 }) => new Promise(async (resolve, reject) => {
   try {
-    await userSocket.create({
-      data: {
-        userId,
-        socketId,
-        isActive: true,
-      },
-    });
-    resolve();
+    if (!many) {
+      const updatedUser = await User.update({
+        where,
+        data,
+      });
+      resolve(updatedUser);
+    } else {
+      const updatedUser = await User.updateMany({
+        where,
+        data,
+      });
+      resolve(updatedUser);
+    }
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
-exports.getSocketIdForUser = ({
-  userId,
+exports.findUserVerification = ({
+  where,
+  select,
 }) => new Promise(async (resolve, reject) => {
   try {
-    const socketId = await userSocket.findMany({
-      where: {
-        userId,
-        isActive: true,
-      },
-      select: {
-        socketId: true,
-      },
+    const userVerificationExists = await UserVerification.findFirst({
+      where,
+      select,
     });
 
-    resolve(socketId.map((socket) => socket.socketId));
+    resolve(userVerificationExists);
   } catch (ex) {
     reject(new Error(ex.message));
   }
 });
 
-exports.closeSocketConnection = ({
-  socketId,
+exports.createUserVerification = ({
+  data,
 }) => new Promise(async (resolve, reject) => {
   try {
-    await userSocket.updateMany({
-      where: {
-        socketId,
-      },
-      data: {
-        isActive: false,
-      }
+    const userVerificationCreated = await UserVerification.create({
+      data,
     });
-    resolve();
+
+    resolve(userVerificationCreated);
+  } catch (ex) {
+    reject(new Error(ex.message));
+  }
+});
+
+exports.updateUserVerification = ({
+  data,
+  where,
+  many,
+}) => new Promise(async (resolve, reject) => {
+  try {
+    if (!many) {
+      const updatedVerification = await UserVerification.update({
+        data,
+        where,
+      });
+      resolve(updatedVerification);
+    } else {
+      const updatedVerification = await UserVerification.updateMany({
+        data,
+        where,
+      });
+      resolve(updatedVerification);
+    }
   } catch (ex) {
     reject(new Error(ex.message));
   }
