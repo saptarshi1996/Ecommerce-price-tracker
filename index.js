@@ -12,6 +12,7 @@ const authMiddleware = require('./middlewares/auth');
 
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const productRoute = require('./routes/product');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(cors());
 
 app.use('/auth', authRoute);
 app.use('/user', authMiddleware, userRoute);
+app.use('/product', authMiddleware, productRoute);
 
 app.listen(PORT, HOST, () => console.log(`Server on PORT ${PORT} at ${HOST}`));

@@ -27,6 +27,8 @@ model User {
 
   user_verification UserVerification[]
 
+  user_product UserProduct[]
+
   @@map("users")
 }
 
@@ -48,4 +50,66 @@ model UserVerification {
   user User @relation(fields: [user_id], references: [id])
 
   @@map("user_verifications")
+}
+
+model EcommerceSite {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(100)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  product Product[]
+
+  @@map("ecommerce_site")
+}
+
+model Link {
+  id Int @id @default(autoincrement())
+
+  link String @db.Text()
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  @@map("links")
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String @db.Text()
+
+  current_price Float
+  lowest_price Float
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  ecommerce_id Int
+  ecommerce_site EcommerceSite @relation(fields: [ecommerce_id], references: [id])
+
+  user_product UserProduct[]
+
+  @@map("products")
+}
+
+model UserProduct {
+  id Int @id @default(autoincrement())
+
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+
+  product_id Int
+  product Product @relation(fields: [product_id], references: [id])
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  @@map("user_products")
 }
