@@ -10,6 +10,9 @@ import * as userHelper from '../helpers/user'
 import IUser from '../interfaces/models/user'
 import IUserVerification from '../interfaces/models/user-verification'
 
+import BadRequestError from '../errors/BadRequestError'
+import NotFoundError from '../errors/NotFoundError'
+
 export const userLogin = async (req: Request, res: Response) => {
   try {
     const userLoginPayload: {

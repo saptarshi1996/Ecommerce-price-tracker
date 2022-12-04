@@ -1,4 +1,4 @@
-class InternalServerError extends Error {
+export default class InternalServerError extends Error {
 
   statusCode: number
 

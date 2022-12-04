@@ -1,4 +1,4 @@
-class UnAuthorizedError extends Error {
+export default class UnAuthorizedError extends Error {
 
   statusCode: number
 

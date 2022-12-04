@@ -9,7 +9,7 @@ export const success = ({
   statusCode: number,
   body: Record<string, unknown>
 }) => {
-
+  return res.status(statusCode).json(body)
 }
 
 export const error = ({
@@ -19,6 +19,9 @@ export const error = ({
   res: Response,
   ex: any,
 }) => {
+
+  console.log(ex.stack)
+
   const statusCode: number = ex.statusCode || 500
   return res.status(statusCode).json({
     message: ex.message,
