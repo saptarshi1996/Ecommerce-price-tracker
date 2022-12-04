@@ -1,17 +1,18 @@
 import { Request, Response } from 'express'
 
-import * as response from '../helpers/response'
+import * as response from '../../helpers/response'
 
-import * as userDao from '../dao/user'
+import * as userDao from '../../dao/user'
 
-import * as dateHelper from '../helpers/date'
-import * as userHelper from '../helpers/user'
+import * as dateHelper from '../../helpers/date'
+import * as userHelper from '../../helpers/user'
+import * as queueHelper from '../../helpers/queue'
 
-import IUser from '../interfaces/models/user'
-import IUserVerification from '../interfaces/models/user-verification'
+import IUser from '../../interfaces/models/user'
+import IUserVerification from '../../interfaces/models/user-verification'
 
-import BadRequestError from '../errors/BadRequestError'
-import NotFoundError from '../errors/NotFoundError'
+import BadRequestError from '../../errors/BadRequestError'
+import NotFoundError from '../../errors/NotFoundError'
 
 export const userLogin = async (req: Request, res: Response) => {
   try {
@@ -35,7 +36,7 @@ export const userLogin = async (req: Request, res: Response) => {
       throw new NotFoundError('User does not exists')
     }
 
-    if (!userExists.is_verified) {
+    if (userExists && !userExists.is_verified) {
       throw new BadRequestError('User not verified')
     }
 
@@ -110,6 +111,13 @@ export const userRegister = async (req: Request, res: Response) => {
       expired_at: expiredAt,
       created_at: createdAt,
       otp,
+    })
+
+    queueHelper.sendMessageToQueue({
+      name: 'SendMail', 
+      data: {
+        otp: otp
+      },
     })
 
     return response.success({
