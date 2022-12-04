@@ -1,17 +1,17 @@
 {
   "name": "ecommerce-price-tracker",
   "version": "1.0.0",
-  "main": "build/index.js",
   "repository": "https://github.com/saptarshi1996/Ecommerce-price-tracker.git",
   "author": "saptarshi1996 <saptarshisg96@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "node .",
-    "cron-start": "node . CRON",
-    "dev": "npx nodemon src/api/index.ts",
-    "cron-dev": "npx nodemon src/cron/index.ts",
-    "worker-dev": "npx nodemon src/worker/index.ts"
+    "start:api": "node build/api/index.js",
+    "start:cron": "node build/cron/index.js",
+    "start:worker": "node build/worker/index.js",
+    "dev:api": "npx nodemon src/api/index.ts",
+    "dev:cron": "npx nodemon src/cron/index.ts",
+    "dev:worker": "npx nodemon src/worker/index.ts"
   },
   "dependencies": {
     "@prisma/client": "4.6.1",
