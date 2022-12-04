@@ -1,4 +1,4 @@
-import IConstant from "../interfaces/config/constants";
+import IConstant from "../interfaces/config/constants"
 
 export default {
   QueueConfig: {

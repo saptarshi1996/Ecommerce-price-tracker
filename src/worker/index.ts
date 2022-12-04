@@ -1,15 +1,16 @@
 import express from 'express'
 
-import { config } from 'dotenv'
+import environment from '../config/environment'
 
 import '../packages/bull'
 
 import './jobs/send-mail'
 
-config()
+const {
+  HOST,
+  WORKER_PORT,
+} = environment
 
 const app = express()
 
-const PORT = process.env.WORKER_ROUTE || 8082
-const HOST = process.env.HOST || 'localhost'
-app.listen(+PORT, HOST, () => console.log(`Worker Server on PORT ${PORT} at ${HOST}`))
+app.listen(+WORKER_PORT, HOST, () => console.log(`Worker Server on PORT ${WORKER_PORT} at ${HOST}`))

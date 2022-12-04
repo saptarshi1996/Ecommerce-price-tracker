@@ -1,17 +1,20 @@
 import express from 'express'
 
-import { config } from 'dotenv'
-
 import authRoute from './routes/auth'
 import userRoute from './routes/user'
 
 import authMiddleware from './middlewares/auth'
 
+import environment from '../config/environment'
+
 import IUser from '../interfaces/models/user'
 
 import '../packages/bull'
 
-config()
+const {
+  HOST,
+  API_PORT,
+} = environment
 
 const app = express()
 
@@ -31,6 +34,4 @@ app.use(express.urlencoded({
 app.use('/auth', authRoute)
 app.use('/user', authMiddleware, userRoute)
 
-const PORT = process.env.API_PORT || 8080
-const HOST = process.env.HOST || 'localhost'
-app.listen(+PORT, HOST, () => console.log(`Api Server on PORT ${PORT} at ${HOST}`))
+app.listen(+API_PORT, HOST, () => console.log(`Api Server on PORT ${API_PORT} at ${HOST}`))

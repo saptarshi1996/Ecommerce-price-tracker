@@ -1,15 +1,12 @@
 import Queue from 'bull'
 
-import { config } from 'dotenv'
-
 import Constant from '../config/constants'
-
-config()
+import environment from '../config/environment'
 
 const {
   REDIS_HOST,
   REDIS_PORT,
-} = process.env
+} = environment
 
 const worker: Record<string, any> = {}
 const queueConfig = Constant.QueueConfig
