@@ -12,4 +12,4 @@ const PORT = process.env.WORKER_ROUTE || 8082
 const HOST = process.env.HOST || 'localhost'
 app.listen(+PORT, HOST, () => console.log(`Worker Server on PORT ${PORT} at ${HOST}`))
 
-import './jobs/sendmail'
+import './jobs/send-mail'
