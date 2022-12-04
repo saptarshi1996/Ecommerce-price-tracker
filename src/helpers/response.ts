@@ -1,10 +1,6 @@
 import { Response } from 'express'
 
-export const success = ({
-  res,
-  statusCode,
-  body,
-}: {
+export const success = ({ res, statusCode, body }: {
   res: Response,
   statusCode: number,
   body: Record<string, unknown>
@@ -12,10 +8,7 @@ export const success = ({
   return res.status(statusCode).json(body)
 }
 
-export const error = ({
-  res,
-  ex,
-}: {
+export const error = ({ res, ex }: {
   res: Response,
   ex: any,
 }) => {

@@ -2,9 +2,9 @@ import Queue from 'bull'
 
 import { config } from 'dotenv'
 
-config()
+import Constant from '../config/constants'
 
-import Constant from './constants'
+config()
 
 const {
   REDIS_HOST,

@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express"
 
 import * as userDao from '../../dao/user'
-import NotFoundError from "../../errors/NotFoundError";
 
 import * as response from '../../helpers/response'
 import * as userHelper from '../../helpers/user'
+
+import NotFoundError from "../../errors/NotFoundError"
 
 export default async function (req: Request, res: Response, next: NextFunction) {
   try {

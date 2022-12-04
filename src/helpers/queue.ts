@@ -1,4 +1,4 @@
-import Worker from '../config/bull'
+import Worker from '../packages/bull'
 
 export const sendMessageToQueue = async ({
   name,

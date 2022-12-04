@@ -2,14 +2,14 @@ import express from 'express'
 
 import { config } from 'dotenv'
 
-import '../config/bull'
-
 import authRoute from './routes/auth'
 import userRoute from './routes/user'
 
 import authMiddleware from './middlewares/auth'
 
 import IUser from '../interfaces/models/user'
+
+import '../packages/bull'
 
 config()
 
