@@ -116,6 +116,7 @@ export const userRegister = async (req: Request, res: Response) => {
     queueHelper.sendMessageToQueue({
       name: 'SendMail', 
       data: {
+        userId: userCreated.id,
         otp: otp
       },
     })
