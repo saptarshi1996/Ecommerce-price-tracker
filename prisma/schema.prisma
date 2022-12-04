@@ -26,6 +26,7 @@ model User {
   deleted_at DateTime?
 
   user_verification UserVerification[]
+  user_product UserProduct[]
 
   @@map("users")
 }
@@ -47,4 +48,77 @@ model UserVerification {
   user User @relation(fields: [user_id], references: [id])
 
   @@map("user_verifications")
+}
+
+model EcommerceSite {
+  id Int @default(autoincrement()) @id
+
+  name EcommerceSiteName @default(AMAZON)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  product Product[]
+
+  @@map("ecommerce_sites")
+}
+
+model Link {
+  id Int @default(autoincrement()) @id
+
+  link String @db.Text()
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  product Product[]
+
+  @@map("links")
+}
+
+model Product {
+  id Int @default(autoincrement()) @id
+
+  name String @db.Text()
+  image_url String? @db.Text()
+
+  current_price Float @default(0)
+  lowest_price Float @default(0)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  ecommerce_site_id Int
+  ecommerce_site EcommerceSite @relation(fields: [ecommerce_site_id], references: [id])
+
+  link_id Int
+  link Link @relation(fields: [link_id], references: [id])
+
+  user_product UserProduct[]
+
+  @@map("products")
+}
+
+model UserProduct {
+  id Int @default(autoincrement()) @id
+
+  created_at DateTime? @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+
+  product_id Int
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@map("user_products")
+}
+
+enum EcommerceSiteName {
+  AMAZON
+  FLIPKART
 }

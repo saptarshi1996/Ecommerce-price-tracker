@@ -1,4 +1,5 @@
 import IUserVerification from "./user-verification"
+import IUserProduct from "./user_product"
 
 export default interface IUser {
   id?: number
@@ -12,4 +13,5 @@ export default interface IUser {
   deleted_at?: Date
 
   user_verification?: IUserVerification[]
+  user_product?: IUserProduct[]
 }

@@ -28,7 +28,7 @@ export const findUser = ({
 })
 
 export const createUser = (data: any): Promise<IUser> => new Promise(async (resolve, reject) => {
-  try{ 
+  try {
     const createdUser = await User.create({ data: data as any })
     resolve(createdUser as IUser)
   } catch (ex: any) {
@@ -42,7 +42,7 @@ export const updateUser = ({
 }: {
   where: Record<string, any>,
   data: Record<string, any>,
-}, many=false) => new Promise(async (resolve, reject) => {
+}, many = false) => new Promise(async (resolve, reject) => {
   try {
     const updatedUser = await many ? User.updateMany({
       where,
@@ -63,7 +63,7 @@ export const findUserVerification = ({
   select,
 }: {
   where: Record<string, unknown>,
-  select: Record< string, unknown>,
+  select: Record<string, unknown>,
 }) => new Promise(async (resolve, reject) => {
   try {
     const userVerificationFound = await UserVerification.findFirst({
@@ -96,8 +96,8 @@ export const updateUserVerification = ({
   data,
 }: {
   where: Record<string, unknown>,
-  data: Record< string, unknown>,
-}, many=false) => new Promise(async (resolve, reject) => {
+  data: Record<string, unknown>,
+}, many = false) => new Promise(async (resolve, reject) => {
   try {
     const updatedUserVerification = await many ? UserVerification.updateMany({
       where,
