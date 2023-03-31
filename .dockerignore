@@ -1,0 +1,8 @@
+node_modules/
+build/
+
+.nvmrc
+Dockerfile
+README.md
+.gitignore
+.eslint*
