@@ -16,8 +16,8 @@ model User {
   first_name String  @db.VarChar(200)
   last_name  String? @db.VarChar(200)
 
-  email    String @unique @db.VarChar(50)
-  password String @db.VarChar(20)
+  email    String @unique @db.VarChar(200)
+  password String @db.VarChar(200)
 
   is_verified Boolean @default(false)
 

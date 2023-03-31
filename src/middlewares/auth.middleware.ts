@@ -17,24 +17,21 @@ const authMiddleware = async (req: Request) => {
   const verified = verifyToken(token as string) as IUser
 
   // Check if user is valid or not.
-  const userFound: IUser = await getUser({
+  const userFound = await getUser({
     where: {
       id: verified.id
     },
     select: {
       id: true
     }
-  })
+  }) as IUser
 
   if (!userFound) {
     throw new BadRequestError('Invalid token')
   }
 
   req.user = { id: verified.id }
-
-  return {
-    valid: true
-  }
+  return { valid: true }
 }
 
 export default wrapAsync(authMiddleware)

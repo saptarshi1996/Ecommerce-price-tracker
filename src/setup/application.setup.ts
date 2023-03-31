@@ -1,6 +1,8 @@
 import express, { Application } from 'express'
 import cors from 'cors'
 
+import apiRouter from '../routes/api.route'
+
 import IUser from '../interfaces/models/user.interface'
 
 declare global {
@@ -19,6 +21,8 @@ export const getApplication = async (): Promise<Application> => {
     extended: false
   }))
   app.use(cors())
+
+  app.use('/api', apiRouter)
 
   return app
 }

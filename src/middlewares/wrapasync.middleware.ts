@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 
 import logger from '../config/logger.config'
+import environment from '../config/environment.config'
 
-export default function wrapAsync (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) {
-  function getStatusFromRequest (method: string): number {
+const wrapAsync = (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>) => {
+  const getStatusFromRequest = (method: string): number => {
     switch (method) {
       case 'POST':
         return 201
@@ -18,10 +19,10 @@ export default function wrapAsync (fn: (req: Request, res: Response, next: NextF
     }
   }
 
-  return function (req: Request, res: Response, next: NextFunction) {
+  return (req: Request, res: Response, next: NextFunction) => {
     fn(req, res, next).then((result: any) => {
       // If result has valid: true, it comes from middleware and needs to be passed to next()
-      if (result.valid) {
+      if (result.MIDDLEWARE_SECRET === environment.MIDDLEWARE_SECRET) {
         next()
         return
       }
@@ -42,3 +43,5 @@ export default function wrapAsync (fn: (req: Request, res: Response, next: NextF
     })
   }
 }
+
+export default wrapAsync
