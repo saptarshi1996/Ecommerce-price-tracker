@@ -1,7 +1,10 @@
 import { Request } from 'express'
 import { Schema } from 'yup'
+
 import BadRequestError from '../errors/badrequest.error'
-import wrapAsync from './wrapasync.middleware'
+
+import wrapAsync from '../wrappers/async.wrapper'
+
 import environment from '../config/environment.config'
 
 const validateSchemaMiddleware = (schema: Schema) => wrapAsync(async (req: Request) => {

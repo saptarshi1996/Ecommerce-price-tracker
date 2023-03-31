@@ -2,11 +2,13 @@ import { Request } from 'express'
 
 import {
   getUser,
-  createUser
+  createUser,
+  updateUser
 } from '../dao/user.dao'
-
 import {
-  createUserVerification
+  getUserVerification,
+  createUserVerification,
+  updateUserVerification
 } from '../dao/user-verification.dao'
 
 import NotFoundError from '../errors/notfound.error'
@@ -18,10 +20,10 @@ import {
   generateToken,
   generateOtp
 } from '../helpers/auth.helper'
+import { addMinutes } from '../helpers/date.helper'
 
 import IUser from '../interfaces/models/user.interface'
-
-import { addMinutes } from '../helpers/date.helper'
+import IUserVerification from '../interfaces/models/userverification.interface'
 
 export const userLogin = async (req: Request) => {
   const userLoginPayload = req.body as {
@@ -72,7 +74,7 @@ export const userRegister = async (req: Request) => {
     select: {
       id: true
     }
-  })
+  }) as IUser
 
   if (userFound) {
     throw new BadRequestError('User already exists.')
@@ -105,4 +107,76 @@ export const userRegister = async (req: Request) => {
   })
 
   return { message: 'User registered successfully' }
+}
+
+export const verifyUser = async (req: Request) => {
+  const userVerifyPayload = req.body as {
+    email: string
+    otp: number
+  }
+
+  const userFound = await getUser({
+    where: {
+      email: userVerifyPayload.email
+    },
+    select: {
+      id: true,
+      is_verified: true
+    }
+  }) as IUser
+
+  if (!userFound) {
+    throw new NotFoundError('User does not exists.')
+  }
+
+  if (userFound.is_verified) {
+    throw new BadRequestError('User already verified.')
+  }
+
+  const userVerificationFound = await getUserVerification({
+    where: {
+      user_id: userFound.id,
+      otp: userVerifyPayload.otp
+    },
+    select: {
+      id: true,
+      is_revoked: true,
+      is_expired: true
+    }
+  }) as IUserVerification
+
+  if (!userVerificationFound) {
+    throw new NotFoundError('User verification does not exists.')
+  }
+
+  if (userVerificationFound.is_expired) {
+    throw new BadRequestError('User verification expired.')
+  }
+
+  if (userVerificationFound.is_revoked) {
+    throw new BadRequestError('User verification revoked.')
+  }
+
+  const updateUserPromise = updateUser({
+    where: {
+      id: userFound.id
+    },
+    data: {
+      is_verified: true
+    }
+  })
+
+  const updateUserVerificationPromise = updateUserVerification({
+    where: {
+      user_id: userVerificationFound.user_id
+    },
+    data: {
+      is_expired: true,
+      is_revoked: true
+    },
+    many: true
+  })
+
+  await Promise.all([updateUserPromise, updateUserVerificationPromise])
+  return { message: 'User verified successfully' }
 }

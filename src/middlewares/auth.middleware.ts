@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-import wrapAsync from './wrapasync.middleware'
+import wrapAsync from '../wrappers/async.wrapper'
 
 import IUser from '../interfaces/models/user.interface'
 
