@@ -49,3 +49,23 @@ model UserVerification {
   @@index([otp, user_id])
   @@map("user_verifications")
 }
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(255)
+  full_name String @db.Text()
+
+  url String @db.Text()
+
+  current_price Float @default(0)
+  lowest_price Float @default(0)
+
+  created_at DateTime? @default(now()) @db.Date
+  updated_at DateTime? @db.Date
+  deleted_at DateTime? @db.Date
+
+  @@index([name])
+
+  @@map("products")
+}

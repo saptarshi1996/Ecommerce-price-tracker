@@ -180,3 +180,57 @@ export const verifyUser = async (req: Request) => {
   await Promise.all([updateUserPromise, updateUserVerificationPromise])
   return { message: 'User verified successfully' }
 }
+
+export const resendToken = async (req: Request) => {
+  const resendTokenPayload = req.body as {
+    email: string
+  }
+
+  const userFound = await getUser({
+    where: {
+      email: resendTokenPayload.email
+    },
+    select: {
+      id: true,
+      is_verified: true
+    }
+  }) as IUser
+
+  if (!userFound) {
+    throw new NotFoundError('User does not exists.')
+  }
+
+  if (userFound.is_verified) {
+    throw new BadRequestError('User already verified.')
+  }
+
+  // Revoke all old user verifications
+  await updateUserVerification({
+    data: {
+      is_revoked: true,
+      is_expired: true
+    },
+    where: {
+      user_id: userFound.id
+    },
+    many: true
+  })
+
+  const otp = generateOtp()
+
+  const createdAt = new Date()
+  const expiresAt = addMinutes(createdAt, 30)
+
+  await createUserVerification({
+    data: {
+      otp,
+      is_revoked: false,
+      is_expired: false,
+      expires_at: expiresAt,
+      created_at: createdAt,
+      user_id: userFound.id
+    }
+  })
+
+  return { message: 'User token sent successfully.' }
+}
