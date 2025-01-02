@@ -100,6 +100,7 @@ export const userRegister = async (req: Request) => {
 
   const otp = generateOtp()
 
+  // Get date and expiry time to the date
   const createdAt = new Date()
   const expiresAt = addMinutes({
     date: createdAt,
