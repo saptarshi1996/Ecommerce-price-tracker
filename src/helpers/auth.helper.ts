@@ -11,7 +11,13 @@ export const generateOtp = () => Math.floor(100000 + Math.random() * 900000)
 
 export const hashPassword = (password: string) => hashSync(password, 10)
 
-export const comparePassword = (password: string, hash: string) => compareSync(password, hash)
+export const comparePassword = ({
+  hash,
+  password
+}: {
+  hash: string
+  password: string
+}) => compareSync(password, hash)
 
 export const generateToken = (id: number) => sign({ id }, environment.JWT_SECRET, {
   expiresIn: 60 * 60 * 3600

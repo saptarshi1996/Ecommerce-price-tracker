@@ -33,12 +33,13 @@ export const userLogin = async (req: Request) => {
 
   const userFound = await getUser({
     where: {
-      email: userLoginPayload.email
+      id: true,
+      is_verified: true
     },
     select: {
       id: true,
-      password: true,
-      is_verified: true
+      is_verified: true,
+      password: true
     }
   }) as IUser
 
@@ -50,11 +51,17 @@ export const userLogin = async (req: Request) => {
     throw new BadRequestError('User not verified.')
   }
 
-  const matchPassword = comparePassword(userLoginPayload.password, userFound.password as string)
+  // Check if the password is valid
+  const matchPassword = comparePassword({
+    hash: userLoginPayload.password,
+    password: userFound.password as string
+  })
+
   if (!matchPassword) {
     throw new BadRequestError('Invalid password.')
   }
 
+  // Create new token
   const token = generateToken(userFound.id as number)
   return { token }
 }
@@ -93,7 +100,10 @@ export const userRegister = async (req: Request) => {
   const otp = generateOtp()
 
   const createdAt = new Date()
-  const expiresAt = addMinutes(createdAt, 30)
+  const expiresAt = addMinutes({
+    date: createdAt,
+    minute: 30
+  })
 
   await createUserVerification({
     data: {
@@ -219,7 +229,10 @@ export const resendToken = async (req: Request) => {
   const otp = generateOtp()
 
   const createdAt = new Date()
-  const expiresAt = addMinutes(createdAt, 30)
+  const expiresAt = addMinutes({
+    date: createdAt,
+    minute: 30
+  })
 
   await createUserVerification({
     data: {

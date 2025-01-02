@@ -1,1 +1,7 @@
-export const addMinutes = (date: Date, minutes: number) => new Date(date.getTime() + minutes * 60000)
+export const addMinutes = ({
+  date,
+  minute
+}: {
+  date: Date
+  minute: number
+}) => new Date(date.getTime() + minute * 60000)
