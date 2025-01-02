@@ -20,6 +20,7 @@ import {
   generateToken,
   generateOtp
 } from '../helpers/auth.helper'
+
 import { addMinutes } from '../helpers/date.helper'
 
 import IUser from '../interfaces/models/user.interface'
