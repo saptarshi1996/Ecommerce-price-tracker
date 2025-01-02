@@ -15,10 +15,10 @@ import NotFoundError from '../errors/notfound.error'
 import BadRequestError from '../errors/badrequest.error'
 
 import {
+  generateOtp,
   hashPassword,
-  comparePassword,
   generateToken,
-  generateOtp
+  comparePassword
 } from '../helpers/auth.helper'
 
 import { addMinutes } from '../helpers/date.helper'
