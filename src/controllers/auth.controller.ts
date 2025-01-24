@@ -250,3 +250,6 @@ export const resendToken = async (req: Request) => {
 
   return { message: 'User token sent successfully.' }
 }
+
+export const resetPassword = async (req: Request) => {
+}
