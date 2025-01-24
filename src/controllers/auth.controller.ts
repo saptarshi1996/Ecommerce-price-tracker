@@ -252,4 +252,52 @@ export const resendToken = async (req: Request) => {
 }
 
 export const resetPassword = async (req: Request) => {
+  const { id } = req.user as {
+    id: number
+  }
+
+  const {
+    old_password: oldPassword,
+    new_password: newPassword
+  } = req.body as {
+    old_password: string
+    new_password: string
+  }
+
+  // Check if old password is correct or not.
+  const userExists = await getUser({
+    where: {
+      id
+    },
+    select: {
+      id: true,
+      password: true
+    }
+  }) as IUser
+
+  const passwordValid = comparePassword({
+    hash: userExists.password as string,
+    password: oldPassword
+  })
+
+  if (!passwordValid) {
+    throw new BadRequestError('Password does not match.')
+  }
+
+  // If password is validated. Update password for user
+  const hashedPassword = hashPassword(newPassword)
+  const userUpdated = await updateUser({
+    where: {
+      id
+    },
+    data: {
+      password: hashedPassword
+    }
+  })
+
+  console.log(userUpdated)
+
+  return {
+    message: 'User password updated successfully.'
+  }
 }
