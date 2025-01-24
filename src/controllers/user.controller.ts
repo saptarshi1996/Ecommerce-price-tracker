@@ -29,3 +29,5 @@ export const fetchUser = async (req: Request) => {
     user: userExists
   }
 }
+
+export const userUpdate = async (req: Request) => {}
