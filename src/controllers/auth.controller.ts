@@ -261,15 +261,13 @@ export const resetPassword = async (req: Request) => {
     new_password: string
   }
 
-  // Check if user exists and the old password is a match.
+  // Check if user exists and password is valid
   const userExists = await getUser({
-    where: {
-      id
-    },
+    where: { id },
     select: {
       id: true,
-      password: true,
-      is_verified: true
+      is_verified: true,
+      password: true
     }
   }) as IUser
 
@@ -278,27 +276,28 @@ export const resetPassword = async (req: Request) => {
   }
 
   const passwordValid = comparePassword({
-    hash: userExists?.password as string,
+    hash: userExists.password as string,
     password: oldPassword
   })
 
   if (!passwordValid) {
-    throw new BadRequestError('Invalid Password')
+    throw new BadRequestError('Incorrect password')
   }
 
-  // Update the password.
-  const newHash = hashPassword(newPassword)
+  // Check validity of the password and update it
+  if (oldPassword === newPassword) {
+    throw new BadRequestError('Old password is same as new password')
+  }
+
   await updateUser({
-    where: {
-      id
-    },
+    where: { id },
     data: {
-      password: newHash
+      password: newPassword
     },
-    many: false
+    many: true
   })
 
   return {
-    message: 'Password updated successfully.'
+    message: 'User password updated successfully'
   }
 }
