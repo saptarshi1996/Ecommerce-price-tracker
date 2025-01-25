@@ -252,10 +252,7 @@ export const resendToken = async (req: Request) => {
 }
 
 export const resetPassword = async (req: Request) => {
-  const { id } = req.user as {
-    id: number
-  }
-
+  const { id } = req.user
   const {
     old_password: oldPassword,
     new_password: newPassword
@@ -264,40 +261,44 @@ export const resetPassword = async (req: Request) => {
     new_password: string
   }
 
-  // Check if old password is correct or not.
+  // Check if user exists and the old password is a match.
   const userExists = await getUser({
     where: {
       id
     },
     select: {
       id: true,
-      password: true
+      password: true,
+      is_verified: true
     }
   }) as IUser
 
+  if (!userExists) {
+    throw new NotFoundError('User does not exists')
+  }
+
   const passwordValid = comparePassword({
-    hash: userExists.password as string,
+    hash: userExists?.password as string,
     password: oldPassword
   })
 
   if (!passwordValid) {
-    throw new BadRequestError('Password does not match.')
+    throw new BadRequestError('Invalid Password')
   }
 
-  // If password is validated. Update password for user
-  const hashedPassword = hashPassword(newPassword)
-  const userUpdated = await updateUser({
+  // Update the password.
+  const newHash = hashPassword(newPassword)
+  await updateUser({
     where: {
       id
     },
     data: {
-      password: hashedPassword
-    }
+      password: newHash
+    },
+    many: false
   })
 
-  console.log(userUpdated)
-
   return {
-    message: 'User password updated successfully.'
+    message: 'Password updated successfully.'
   }
 }
