@@ -130,6 +130,7 @@ export const verifyUser = async (req: Request) => {
     otp: number
   }
 
+  // Check if user exists
   const userFound = await getUser({
     where: {
       email: userVerifyPayload.email
@@ -201,6 +202,7 @@ export const resendToken = async (req: Request) => {
     email: string
   }
 
+  // Check if user exists
   const userFound = await getUser({
     where: {
       email: resendTokenPayload.email
