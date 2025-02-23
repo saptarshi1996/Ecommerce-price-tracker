@@ -77,6 +77,7 @@ export const userRegister = async (req: Request) => {
     password: string
   }
 
+  // Check if user exists
   const userFound = await getUser({
     where: {
       email: userRegisterPayload.email
